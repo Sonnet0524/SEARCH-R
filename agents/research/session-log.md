@@ -1,0 +1,83 @@
+# Research Agent 会话日志
+
+---
+
+## [2026-03-08] 研究记录迁移
+
+### 会话主题
+将 knowledge-assistant-dev 中的 SEARCH-R 方法论相关研究内容迁移到 SEARCH-R 独立仓库。
+
+### 迁移背景
+- SEARCH-R 方法论已从 Agent Team 实践中提炼出来，成为独立的方法论框架
+- 需要将方法论文档与实践文档分离，保持 SEARCH-R 仓库的纯粹性
+- Agent Team 相关的实践记录保留在 knowledge-assistant-dev 仓库
+
+### 迁移内容
+
+#### 1. 理论文档 (theory/)
+- ✅ 2026-03-07-metacognition-implementation.md (1403行)
+  - 元认知意识实现方案
+  - 质量门控、确定性评估、元认知设计
+  
+- ✅ 2026-03-07-memory-compression-deep-dive.md (1277行)
+  - 记忆压缩机制研究
+  - Context优化、记忆系统设计
+  
+- ✅ 2026-03-07-quality-gate-and-agent-definition.md (804行)
+  - 质量门控与Agent定义深度Review
+  - 元认知意识、质量门控本质探讨
+
+#### 2. 自我反思 (reflections/)
+- ✅ 2026-03-07.md (288行)
+  - Research Agent方法论设计反思
+  - 方法论评估、改进建议
+  
+- ✅ 2026-03-07-quality-gate-review.md (361行)
+  - 质量门控深度Review反思
+
+#### 3. 示例文档 (examples/)
+- ✅ example-session.md (399行)
+  - 完整会话示例
+
+#### 4. 框架文档 (methodology/)
+- ✅ framework-README.md
+  - Research Agent框架说明
+  - 已复制到 methodology/ 目录
+
+### 不迁移的内容
+
+以下内容保留在 knowledge-assistant-dev，因为它们是 Agent Team 实践相关：
+
+- observations/ - Agent协作模式观察
+- retrievals/ - OpenClaw对比
+- proposals/ - Agent Team研究提案
+- theories/ - Agent Team框架差距分析、对比
+- discussions/ - Agent Team关键决策
+
+### 迁移统计
+- 迁移文件：7个
+- 总行数：4,532行
+- 迁移时间：2026-03-08
+
+### 关键决策
+1. **内容判断标准**：
+   - 迁移：SEARCH-R方法论相关（理论、方法、工具）
+   - 不迁移：Agent Team实践相关（案例、观察、决策）
+
+2. **目录结构**：
+   - theory/ - 理论文档
+   - reflections/ - 自我反思
+   - examples/ - 示例文档
+   - methodology/ - 方法论框架文档
+
+### 后续任务
+- [ ] 整理 theory/ 目录中的文档
+- [ ] 更新 AGENTS.md 引用新的文档位置
+- [ ] 完善研究课题记录机制
+- [ ] 建立会话日志规范
+
+---
+
+**记录者**: Research Agent  
+**记录时间**: 2026-03-08  
+**会话类型**: 迁移操作

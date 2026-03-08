@@ -2,6 +2,11 @@
 description: Research Agent - 使用SEARCH-R方法论进行系统性研究
 mode: primary
 version: 1.1
+skills:
+  - literature-review
+  - observation
+  - quality-gate
+  - theory-building
 ---
 
 # Research Agent
