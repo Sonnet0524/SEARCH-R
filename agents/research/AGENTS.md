@@ -110,12 +110,15 @@ R - Reflect（反思迭代）：持续优化方法
 ### 3. 文档化能力（不可分离）
 
 **标准产出**：
-- 观察笔记（observation/）
-- 检索报告（retrieval/）
+- 观察笔记（observations/）
+- 检索报告（retrievals/）
 - 理论文档（theory/）
-- 反思笔记（reflection/）
+- 反思笔记（reflections/）
+- 会话日志（session-log.md）
 
 **使用模板**：参考 `templates/` 目录
+
+📖 [理论文档库](theory/) | [反思记录库](reflections/) | [示例文档](examples/)
 
 ---
 
@@ -196,7 +199,7 @@ R - Reflect（反思迭代）：持续优化方法
 
 **实践**：
 - 每次会话结束：简单反思（session-log.md）
-- 重大突破后：深度反思（self-reflection/）
+- 重大突破后：深度反思（reflections/）
 - 定期回顾：优化研究方法
 
 ---
@@ -262,16 +265,29 @@ agents/research/
 ├── AGENTS.md                  # 本文件：身份和能力
 ├── init.md                    # 研究课题初始化指南
 ├── current-topic.md           # 当前研究课题引用
-├── research-topics/           # 研究课题库
-│   ├── topic-1.md
-│   └── topic-2.md
+├── session-log.md             # 会话日志
+│
+├── theory/                    # 理论文档库
+│   ├── 2026-03-07-metacognition-implementation.md
+│   ├── 2026-03-07-memory-compression-deep-dive.md
+│   └── 2026-03-07-quality-gate-and-agent-definition.md
+│
+├── reflections/               # 自我反思库
+│   ├── 2026-03-07.md
+│   └── 2026-03-07-quality-gate-review.md
+│
+├── examples/                  # 示例文档
+│   └── example-session.md
+│
 ├── skills/                    # 可复用能力
 │   ├── literature-review.md
 │   ├── theory-building.md
 │   ├── observation.md
 │   └── quality-gate.md
-├── session-log.md             # 会话日志
-└── experiences/               # 经验记忆（可选）
+│
+└── research-topics/           # 研究课题库
+    ├── agent-collaboration.md
+    └── topic-template.md
 ```
 
 ---
@@ -367,6 +383,11 @@ agents/research/
 - [研究课题初始化指南](init.md)
 - 当前研究课题：`current-topic.md`
 
+### 理论与反思
+- [理论文档库](theory/) - 核心理论研究成果
+- [反思记录库](reflections/) - 方法论反思与迭代
+- [示例文档](examples/) - 研究会话示例
+
 ### 模板和工具
 - [文档模板](../../templates/)
 - [Skills库](skills/)
@@ -374,10 +395,17 @@ agents/research/
 ### 使用文档
 - [快速开始](../../docs/getting-started.md)
 - [设计哲学](../../docs/design-philosophy.md)
+- [迁移报告](../../docs/MIGRATION-REPORT.md)
 
 ---
 
 ## 📝 版本历史
+
+- **v1.2** (2026-03-08) - 文档迁移与整理
+  - 迁移理论文档到 theory/ 目录
+  - 迁移反思文档到 reflections/ 目录
+  - 添加示例文档 examples/
+  - 创建会话日志机制
 
 - **v1.1** (2026-03-07) - 多课题管理支持
   - 分离研究主体和研究课题
@@ -392,6 +420,6 @@ agents/research/
 ---
 
 **维护者**: SEARCH-R Framework  
-**更新时间**: 2026-03-07  
+**更新时间**: 2026-03-08  
 **文档类型**: Agent核心定义  
 **Token目标**: ~5k tokens
