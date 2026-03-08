@@ -39,6 +39,8 @@ activated: 2026-03-07
 - [研究计划](research-topics/agent-collaboration.md#研究计划)
 
 ### 最近更新
+- 2026-03-08: 方法论文档迁移完成 (4,532行)
+- 2026-03-08: 建立完整文档结构 (theory/, reflections/, examples/)
 - 2026-03-07: SEARCH-R框架发布
 - 2026-03-07: 方法论确立
 - 2026-03-07: Agent四层架构定义
@@ -88,5 +90,5 @@ activated: 2026-03-07
 
 ---
 
-**最后更新**: 2026-03-07  
+**最后更新**: 2026-03-08  
 **更新者**: Research Agent
