@@ -1,5 +1,12 @@
 # SEARCH-R Framework
 
+> **L0 - Research Data Source Layer**
+> 
+> This repository serves as the foundational methodology layer in the multi-repository architecture.
+> It provides research methodology and instance storage for L1 research agents.
+> 
+> **Hierarchy**: L0 (SEARCH-R) → L1 (agent-team-research) → L2 (AgentTeam-Template) → L3 (Projects)
+
 A methodology framework for AI Agent research.
 
 [English](#english) | [中文](#中文)

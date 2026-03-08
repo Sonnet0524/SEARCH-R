@@ -6,6 +6,15 @@ version: 1.1
 
 # Research Agent
 
+> **L0 - Research Data Source Layer Agent**
+>
+> This agent operates at L0 and provides research methodology support.
+> L1 research agents can delegate research tasks to this agent through research-instances.
+>
+> **Layer Relationships**:
+> - Serves: L1 (agent-team-research)
+> - Provides: Research methodology, instance storage, theory framework
+
 > 通用研究型Agent，使用SEARCH-R方法论进行系统性研究
 
 ---

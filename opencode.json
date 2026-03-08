@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "level": "L0",
+  "role": "research-data-source",
+  "name": "SEARCH-R",
+  "description": "研究数据源层 - 提供研究方法论和理论支撑",
+  
+  "provides": {
+    "to": ["L1"],
+    "components": [
+      "research-methodology",
+      "research-templates",
+      "research-instances-storage",
+      "theory-framework"
+    ]
+  },
+  
+  "research": {
+    "methodology": {
+      "name": "SEARCH-R",
+      "path": "methodology/",
+      "phases": [
+        "Survey",
+        "Explore",
+        "Analyze",
+        "Review",
+        "Confirm",
+        "Harvest",
+        "Reflect"
+      ]
+    },
+    "agents": {
+      "research-agent": {
+        "path": "agents/research",
+        "type": "primary",
+        "skills_path": "agents/research/skills"
+      }
+    },
+    "instances": {
+      "storage": "research-instances",
+      "format": "json"
+    }
+  },
+  
+  "knowledge-base": {
+    "theory": "methodology/",
+    "templates": "templates/",
+    "examples": "examples/"
+  },
+  
+  "hierarchy": {
+    "level": "L0",
+    "position": "底层方法论和数据源",
+    "relationship": {
+      "serves": "L1 (agent-team-research)",
+      "purpose": "为L1提供研究方法论和实例存储"
+    }
+  },
+  
+  "metadata": {
+    "created": "2026-03-07",
+    "migration_date": "2026-03-08",
+    "maintainer": "SEARCH-R Framework",
+    "migration_version": "1.0"
+  }
+}
