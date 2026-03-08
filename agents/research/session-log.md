@@ -108,6 +108,12 @@ c363345 docs: Update AGENTS.md structure and remove old file
 1. 继续完善 Agent模板标准
 2. 基于 theory/ 文档深化研究
 3. 收集实践验证数据
+4. 考虑 agent-team-research 和 AgentTeam-Template 的 research agent 配置问题
+
+### 待解决问题
+- **agent-team-research (L1)**: 需要检查 research-agent 配置是否完整
+- **AgentTeam-Template (L2)**: opencode.json 只有 pm agent，可能需要添加 research agent 引用
+- 多仓库之间的 agent 发现和协作机制需要进一步梳理
 
 ---
 
