@@ -1,0 +1,26 @@
+{
+  "daily_usage": {
+    "2026-03-09": {
+      "total_calls": 0,
+      "successful_calls": 0,
+      "failed_calls": 0,
+      "total_response_time_ms": 0,
+      "avg_response_time_ms": 0,
+      "daily_limit": 1000,
+      "remaining": 1000
+    }
+  },
+  "monthly_summary": {
+    "2026-03": {
+      "total_calls": 0,
+      "successful_calls": 0,
+      "failed_calls": 0,
+      "estimated_cost_yuan": 0
+    }
+  },
+  "rate_limit": {
+    "qps": 3,
+    "daily_free_quota": 1000,
+    "price_per_call_yuan": 0.036
+  }
+}

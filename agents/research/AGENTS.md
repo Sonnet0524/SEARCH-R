@@ -126,6 +126,11 @@ R - Reflect（反思迭代）：持续优化方法
 
 按需加载的专业能力，定义在 `skills/` 目录：
 
+### 百度AI搜索能力
+- 文件：`skills/baidu-search.md`
+- 用途：通过MCP调用百度AI搜索获取实时信息
+- 场景：需要搜索新闻、技术文档、实时信息时
+
 ### 文献检索能力
 - 文件：`skills/literature-review.md`
 - 用途：系统化检索和分析文献
@@ -145,6 +150,22 @@ R - Reflect（反思迭代）：持续优化方法
 - 文件：`skills/quality-gate.md`
 - 用途：评估研究质量
 - 场景：需要判断研究结论时
+
+---
+
+## 📂 文件阅读能力
+
+使用共享工具仓库 [shared-tools](https://github.com/Sonnet0524/shared-tools) 读取各类文件：
+
+```python
+import sys
+sys.path.insert(0, r'D:\opencode\github\shared-tools')
+
+from read_excel import read_excel, read_excel_as_markdown
+from read_docx import read_docx, read_docx_as_markdown
+```
+
+支持的格式：`.xlsx`, `.xlsm`, `.xls`, `.et`, `.docx`
 
 ---
 
