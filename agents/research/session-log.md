@@ -156,3 +156,173 @@ c363345 docs: Update AGENTS.md structure and remove old file
 **记录时间**: 2026-03-08 23:35  
 **会话类型**: 迁移操作 + 文档整理 + 视觉优化 + 会话收尾  
 **会话状态**: ✅ 已完成
+
+---
+
+## [2026-03-09] 课题定位纠正与Harness Engineering仓库创建
+
+### 会话主题
+明确SEARCH-R的研究定位，创建Harness Engineering独立研究仓库。
+
+### 主要工作
+
+#### 1. 架构理解纠正
+
+**问题发现**：
+- 当前课题"Agent协作框架"定位错误
+- 该课题应该属于agent-team-research项目
+- SEARCH-R应该是研究方法论框架，不是研究具体课题
+
+**正确理解**：
+```
+SEARCH-R (L0) → 研究方法论本身
+  ↓ 提供方法论支撑
+研究课题 (L1) → 使用SEARCH-R研究具体问题
+  ├─ agent-team-research
+  ├─ harness-engineering-research
+  └─ 其他研究课题
+  ↓ 产出成果
+实践项目 (L2) → 研究课题的产出和应用
+```
+
+#### 2. 课题文件处理
+
+**归档操作**：
+- ✅ 创建 archive/ 目录
+- ✅ 移动 agent-collaboration.md 到 archive/
+- ✅ 创建归档说明文档
+
+**新课题创建**：
+- ✅ 创建 search-r-methodology.md
+- ✅ 定义SEARCH-R方法论体系研究
+- ✅ 更新 current-topic.md
+
+#### 3. Harness Engineering独立仓库创建
+
+**仓库初始化**：
+- ✅ 创建完整目录结构
+- ✅ 编写 README.md（项目说明）
+- ✅ 编写 research/topic.md（课题定义）
+- ✅ 编写 research/session-log.md（会话日志）
+- ✅ 编写第一个观察笔记（lm-evaluation-harness分析）
+- ✅ 编写 CATCH_UP.md（快速了解文档）
+- ✅ 复制SEARCH-R模板文件
+- ✅ 创建参考资料结构
+- ✅ 添加 .gitignore
+
+**Git操作**：
+- ✅ 初始化Git仓库
+- ✅ 创建初始提交
+- ✅ 推送到GitHub
+
+**仓库地址**：https://github.com/Sonnet0524/harness-engineering-research
+
+### 关键洞察
+
+#### 1. SEARCH-R的正确定位
+
+**SEARCH-R是什么**：
+- 研究方法论框架
+- 研究如何用LLM+Agent辅助研究
+- 提供方法论、模板、工具
+
+**SEARCH-R不是什么**：
+- 不是研究具体课题的
+- 不是研究Agent协作的
+- 不是研究具体领域的
+
+#### 2. 研究课题的分类
+
+**应该使用SEARCH-R研究的课题**：
+- Agent Team建设思路（agent-team-research）
+- Harness Engineering（harness-engineering-research）
+- 其他研究课题
+
+**这些课题的共同特点**：
+- 使用SEARCH-R方法论
+- 研究具体领域问题
+- 产出理论框架和最佳实践
+
+#### 3. Harness Engineering的初步观察
+
+**关键发现**：
+- lm-evaluation-harness是评估工具，不是评估方法论
+- 标准化有数据和流程层面，但方法论层面缺失
+- 实践中存在：可比性、统一性、解释性、可复现性问题
+
+### 会话统计
+
+- **会话时长**：约2小时
+- **处理文件**：
+  - SEARCH-R：3个文件（归档、新课题、current-topic更新）
+  - Harness：11个文件（完整仓库创建）
+- **Git提交**：
+  - SEARCH-R：2次（归档、课题创建）
+  - Harness：2次（初始提交、.gitignore）
+- **创建仓库**：1个（harness-engineering-research）
+- **推送成功**：✅
+
+### 完成的产出
+
+**SEARCH-R项目**：
+- ✅ 课题定位纠正
+- ✅ 归档错误课题
+- ✅ 创建正确课题
+- ✅ session-log更新
+
+**Harness Engineering项目**：
+- ✅ 完整的仓库结构
+- ✅ 项目文档（README, CATCH_UP）
+- ✅ 研究文档（topic, session-log, observation）
+- ✅ 模板文件（4个）
+- ✅ 参考资料结构
+- ✅ Git仓库初始化和推送
+
+### 当前状态
+
+**SEARCH-R项目**：
+- 当前课题：SEARCH-R方法论体系研究
+- 完成度：70%
+- 状态：方法论已建立，待实践验证
+
+**Harness Engineering项目**：
+- 当前阶段：Survey（观察调研）
+- 完成度：5%
+- 状态：第一个观察已完成，仓库已推送
+
+### 下次会话建议
+
+**SEARCH-R项目**：
+- 继续完善方法论体系
+- 验证方法论在实践中的有效性
+- 服务更多研究课题
+
+**Harness Engineering项目**：
+- 继续Survey阶段
+- 观察更多评估框架（HELM, BIG-bench）
+- 整理问题清单
+- 开始Explore阶段
+
+### 重要决策记录
+
+**决策1：课题归属原则**
+- 问题：如何判断课题归属？
+- 决策：SEARCH-R研究方法论，具体课题创建独立仓库
+- 理由：清晰的架构定位，避免课题混淆
+
+**决策2：仓库创建方式**
+- 问题：Harness Engineering如何创建？
+- 决策：创建独立仓库
+- 理由：独立课题，独立维护，使用SEARCH-R方法论
+
+**决策3：研究深度标准**
+- 问题：Harness Engineering研究多深？
+- 决策：Level 0-2（理论到设计原则）
+- 理由：不涉及具体工具实现
+
+---
+
+**记录者**: Research Agent  
+**记录时间**: 2026-03-09  
+**会话类型**: 架构纠正 + 仓库创建 + 文档完善  
+**会话状态**: ✅ 已完成
