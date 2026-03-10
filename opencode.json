@@ -19,7 +19,7 @@
       "type": "remote",
       "url": "https://qianfan.baidubce.com/v2/ai_search/mcp",
       "headers": {
-        "Authorization": "Bearer ${BAIDU_AISEARCH_TOKEN}"
+        "Authorization": "Bearer {env:BAIDU_AISEARCH_TOKEN}"
       },
       "enabled": true,
       "timeout": 15000

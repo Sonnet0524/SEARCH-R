@@ -1,12 +1,12 @@
 ---
-current_topic: Agent协作框架
-activated: 2026-03-07
+current_topic: 国网供电公司优质服务举措研究
+activated: 2026-03-09
 ---
 
 # 当前研究课题
 
-**课题名称**: Agent协作框架  
-**配置文件**: [research-topics/agent-collaboration.md](research-topics/agent-collaboration.md)  
+**课题名称**: 国网供电公司优质服务举措研究  
+**配置文件**: [research-topics/sgcc-quality-service-research.md](research-topics/sgcc-quality-service-research.md)  
 **状态**: Active  
 **优先级**: High
 
@@ -15,80 +15,90 @@ activated: 2026-03-07
 ## 📊 快速概览
 
 ### 研究目标
-建立一套完整的Agent协作框架，包括协作模式、交互协议、管理方法等。
+系统梳理国网公司在优质服务方面的创新举措和最佳实践，分析服务理念、实施机制和效果评估。
 
 ### 当前进度
-- **阶段**: Harvest（收获产出）
-- **完成度**: 85%
-- **状态**: 正在完善框架文档
+- **阶段**: Survey（观察调研）
+- **完成度**: 0%
+- **状态**: 课题已创建，准备开始研究
 
 ### 核心产出
-- ✅ 文档化交互协议
-- ✅ 分层文档体系
-- ✅ 质量门控机制
-- 🔄 Agent模板标准（进行中）
+- 🔄 优质服务举措分类体系
+- 🔄 服务理念提炼报告
+- 🔄 实施机制分析报告
+- 🔄 最佳实践案例集
+- 🔄 研究总结报告
 
 ---
 
 ## 🔗 快速链接
 
 ### 核心文档
-- [研究背景和目标](research-topics/agent-collaboration.md#研究背景)
-- [当前进展](research-topics/agent-collaboration.md#当前进展)
-- [研究资料](research-topics/agent-collaboration.md#研究资料)
-- [研究计划](research-topics/agent-collaboration.md#研究计划)
+- [研究背景和目标](research-topics/sgcc-quality-service-research.md#研究背景)
+- [当前进展](research-topics/sgcc-quality-service-research.md#当前进展)
+- [研究计划](research-topics/sgcc-quality-service-research.md#研究计划)
+
+### 方法论文档
+- [SEARCH-R循环](../../methodology/search-r-cycle.md)
+- [研究深度定义](../../methodology/research-depth.md)
+- [Human角色定义](../../methodology/human-role.md)
 
 ### 最近更新
-- 2026-03-08: 方法论文档迁移完成 (4,532行)
-- 2026-03-08: 建立完整文档结构 (theory/, reflections/, examples/)
-- 2026-03-07: SEARCH-R框架发布
-- 2026-03-07: 方法论确立
-- 2026-03-07: Agent四层架构定义
+- 2026-03-09: 创建研究课题
 
 ---
 
 ## ⏭️ 下一步行动
 
-1. **完成Agent模板标准**
-   - 明确Agent定义格式
-   - 定义核心字段
-   - 制定验证标准
+1. **Survey阶段：收集基础资料**
+   - 收集国网公司官方政策文件
+   - 检索学术文献和研究报告
+   - 收集新闻报道和典型案例
 
-2. **总结实践经验**
-   - 收集效果数据
-   - 分析成功和失败案例
-   - 提炼最佳实践
+2. **建立资料分类框架**
+   - 按服务举措类型分类
+   - 按时间线整理演变
+   - 按地区收集实践案例
 
-3. **编写验证报告**
-   - 编写实践验证报告
-   - 量化框架效果
-   - 提出改进建议
+3. **记录观察笔记**
+   - 记录初步发现
+   - 识别关键问题
+   - 形成研究假设
 
 ---
 
 ## 💡 当前焦点
 
-**正在研究**: Agent模板标准
+**正在研究**: 国网供电公司优质服务举措的系统梳理
 
 **核心问题**:
-- Agent的核心字段应该包括哪些？
-- 如何区分Agent和Subagent？
-- 如何定义Agent的行为标准？
+- 国网公司优质服务举措包含哪些内容？
+- 优质服务举措背后的设计理念和原则是什么？
+- 优质服务举措如何有效实施和持续改进？
+- 优质服务举措产生了怎样的效果和价值？
 
 **期望产出**:
-- Agent模板标准文档
-- 验证checklist
-- 示例模板
+- 优质服务举措分类体系
+- 服务理念提炼报告
+- 实施机制分析报告
+- 最佳实践案例集
 
 ---
 
-## 📝 注意事项
+## 📝 研究范围
 
-- 本课题是SEARCH-R框架的第一个实践案例
-- 需要持续记录实践经验
-- 发现的问题及时反馈到框架改进
+### 包含的内容
+- 服务理念体系
+- 服务举措分类（营商环境、数字化服务、停电服务、新能源服务等）
+- 实施机制
+- 效果评估
+
+### 不包含的内容
+- 具体技术实现细节
+- 财务数据分析
+- 内部管理流程
 
 ---
 
-**最后更新**: 2026-03-08  
+**最后更新**: 2026-03-09  
 **更新者**: Research Agent

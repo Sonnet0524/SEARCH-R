@@ -485,7 +485,7 @@ MIT License
 
 <div align="center">
 
-**维护者**: Research Agent  
+**维护者**: Sonnet.G  
 **创建时间**: 2026-03-07  
 **最后更新**: 2026-03-08  
 **状态**: 持续迭代中
