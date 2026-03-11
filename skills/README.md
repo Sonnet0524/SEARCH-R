@@ -1,155 +1,157 @@
-# Skills 目录
+# Skills - 研究技能库
 
-本目录包含Research Agent的可复用能力模块。
+本目录包含Research Agent可用的研究技能。每个技能都是一个独立的目录，包含SKILL.md定义文件。
 
-## 📦 已集成Skills
+## 📁 目录结构
 
-### 1. 百度搜索能力 (baidu-search)
-
-**功能**: 通过百度千帆平台API进行实时信息检索
-
-**使用方式**:
-```python
-import sys
-sys.path.insert(0, r'D:\opencode\github\SEARCH-R\agents\research\skills')
-from baidu_web_search_api import BaiduWebSearch
-
-# 创建客户端
-client = BaiduWebSearch()
-
-# 执行搜索
-result = client.search(
-    query="搜索关键词",
-    top_k=10,
-    resource_types=["web"],
-    recency_filter="month"
-)
-
-# 处理结果
-if result["success"]:
-    for ref in result["references"]:
-        print(f"标题: {ref['title']}")
-        print(f"URL: {ref['url']}")
-        print(f"内容: {ref['content'][:200]}...")
+```
+skills/
+├── README.md                  # 本文件：技能库使用指南
+├── literature-review/         # 文献检索技能
+│   └── SKILL.md
+├── observation/               # 观察技能
+│   └── SKILL.md
+├── theory-building/           # 理论构建技能
+│   └── SKILL.md
+├── quality-gate/              # 质量门控技能
+│   └── SKILL.md
+└── baidu-search/              # 百度搜索技能
+    ├── SKILL.md
+    └── scripts/               # 实现脚本
+        └── baidu_web_search_api.py
 ```
 
-**命令行使用**:
-```bash
-cd D:\opencode\github\SEARCH-R
-python agents\research\skills\baidu_web_search_api.py --query "关键词" --top_k 10
-```
+## 📋 可用技能
 
-**特性**:
-- ✅ 支持网页、视频、图片搜索
-- ✅ 支持站点过滤
-- ✅ 支持时效过滤（最近7天/30天/180天/365天）
-- ✅ 自动记录搜索日志到 `search-logs/` 目录
-- ✅ 支持standard和lite两种搜索版本
+### 文献检索能力 (literature-review)
+- **用途**: 系统化检索和分析文献
+- **场景**: 调研现有研究、梳理知识图谱
+- **详情**: [literature-review/SKILL.md](literature-review/SKILL.md)
 
-**文档**: [baidu-search.md](./baidu-search.md)
+### 观察能力 (observation)
+- **用途**: 系统化观察和记录
+- **场景**: 从实践中发现模式和问题
+- **详情**: [observation/SKILL.md](observation/SKILL.md)
 
-**实现**: [baidu_web_search_api.py](./baidu_web_search_api.py)
+### 理论构建能力 (theory-building)
+- **用途**: 构建和验证理论框架
+- **场景**: 提出新理论、建立模型
+- **详情**: [theory-building/SKILL.md](theory-building/SKILL.md)
 
----
+### 质量门控能力 (quality-gate)
+- **用途**: 评估研究质量
+- **场景**: 判断研究结论、决定Human介入时机
+- **详情**: [quality-gate/SKILL.md](quality-gate/SKILL.md)
 
-### 2. 文献检索能力 (literature-review)
-
-**功能**: 系统化检索和分析文献
-
-**文档**: [literature-review.md](./literature-review.md)
-
----
-
-### 3. 观察能力 (observation)
-
-**功能**: 系统化观察和记录
-
-**文档**: [observation.md](./observation.md)
-
----
-
-### 4. 理论构建能力 (theory-building)
-
-**功能**: 构建和验证理论框架
-
-**文档**: [theory-building.md](./theory-building.md)
-
----
-
-### 5. 质量门控能力 (quality-gate)
-
-**功能**: 评估研究质量
-
-**文档**: [quality-gate.md](./quality-gate.md)
-
----
-
-## 🔧 API密钥配置
-
-百度搜索API需要在 `.env.local` 文件中配置：
-
-```bash
-BAIDU_AISEARCH_TOKEN=your_api_key_here
-```
-
-**获取方式**:
-1. 访问 [百度千帆平台](https://console.bce.baidu.com/qianfan/ais/console/onlineTest)
-2. 创建应用并获取API Key
-3. 配置到 `.env.local` 文件
-
-**安全注意**:
-- ⚠️ 请勿将 `.env.local` 文件提交到版本控制
-- ✅ `.gitignore` 已包含 `.env.local`
-
----
-
-## 📊 搜索日志
-
-所有搜索记录自动保存在 `search-logs/` 目录：
-- 文件格式：`YYYY-MM-DD.jsonl`
-- 每行一条记录，包含时间戳、查询、结果数量、响应时间
-
----
-
-## 📝 添加新Skill
-
-要添加新的Skill：
-
-1. 在 `skills/` 目录创建技能文档 `[skill-name].md`
-2. 可选：创建Python实现文件 `[skill_name].py`
-3. 在 `opencode.json` 的 `skills` 数组中添加技能名称
-
-**Skill文档模板**:
-```markdown
----
-skill: skill-name
-category: tool
-depends_on: []
----
-
-# Skill名称
-
-> 简短描述
-
-## 📋 能力定义
-
-详细说明技能的功能和使用场景。
-
-## 🎯 使用场景
-
-列出适用的场景。
+### 百度搜索能力 (baidu-search)
+- **用途**: 实时信息检索
+- **场景**: 搜索新闻、技术文档、实时信息
+- **实现**: 提供Python API脚本
+- **详情**: [baidu-search/SKILL.md](baidu-search/SKILL.md)
 
 ## 🔧 使用方法
 
-提供具体的使用示例。
+### 1. 查看技能定义
 
-## 📚 参考资料
+每个技能目录下都有SKILL.md文件，包含：
+- 技能说明和能力范围
+- 使用场景和触发条件
+- 执行流程和参数说明
+- 示例对话
 
-列出相关文档和资源。
+### 2. 在研究中应用
+
+```markdown
+# 在研究过程中使用技能
+
+## Survey阶段
+使用 [观察技能](observation/SKILL.md) 记录发现
+
+## Explore阶段
+使用 [文献检索技能](literature-review/SKILL.md) 检索资料
+使用 [百度搜索技能](baidu-search/SKILL.md) 搜索实时信息
+
+## Analyze阶段
+使用 [理论构建技能](theory-building/SKILL.md) 构建理论
+
+## 各阶段
+使用 [质量门控技能](quality-gate/SKILL.md) 评估研究质量
 ```
+
+### 3. 使用技能脚本
+
+部分技能提供实现脚本（如baidu-search）：
+
+```bash
+# 使用百度搜索API
+cd skills/baidu-search/scripts
+python3 baidu_web_search_api.py --query "搜索关键词" --top_k 10
+```
+
+## 📝 添加新技能
+
+### 技能模板结构
+
+```
+{skill-name}/
+├── SKILL.md              # 必需：技能定义文件
+└── scripts/              # 可选：实现脚本
+    └── {script-name}.py
+```
+
+### SKILL.md格式
+
+```markdown
+---
+skill_id: skill-name
+name: 技能名称
+description: 技能简要描述
+version: 1.0.0
+skill_type: ability
+category: research
+triggers:
+  - "触发词1"
+  - "触发词2"
+tags:
+  - tag1
+  - tag2
+---
+
+# 技能名称
+
+## 概述
+详细描述技能的用途和特点
+
+## 能力范围
+### ✅ 可以做
+- 能力1
+- 能力2
+
+### ❌ 不能做
+- 限制1
+- 限制2
+
+## 使用场景
+场景描述和示例
+
+## 使用方法
+详细的使用说明
+
+## 参考资料
+相关文档和资源
+```
+
+## 🔗 相关资源
+
+### 方法论文档
+- [SEARCH-R循环](../methodology/search-r-cycle.md)
+- [研究深度定义](../methodology/research-depth.md)
+
+### 模板文档
+- [文档模板库](../templates/)
 
 ---
 
-**维护者**: Research Agent  
-**更新时间**: 2026-03-11  
-**集成状态**: ✅ 百度搜索API已集成
+**创建时间**: 2026-03-11  
+**用途**: 研究技能库使用指南  
+**维护者**: SEARCH-R Framework

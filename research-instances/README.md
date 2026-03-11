@@ -1,93 +1,61 @@
-# Research Instances
+# Research Instances - 研究实例注册表
 
-This directory stores research instances created by L1 research agents.
+本目录用于注册使用SEARCH-R方法论创建的研究课题。
 
-## Purpose
+## 📋 用途
 
-- Provide storage space for L1 (agent-team-research) research instances
-- Support research task delegation from L1 to L0
-- Enable research instance tracking and management
+- 记录使用SEARCH-R方法论的研究课题
+- 提供研究实例的索引和引用
+- 跟踪研究课题的进展
 
-## Structure
+## 📁 结构说明
 
 ```
 research-instances/
-├── {project-name}/              # Project-specific research instances
-│   ├── {instance-id}.json       # Instance configuration
-│   ├── {instance-id}-log.md     # Execution log
-│   └── {instance-id}-output/    # Research outputs
-└── README.md                    # This file
+├── README.md              # 本文件：管理说明
+└── {project-name}.md      # 研究课题引用文件
 ```
 
-## Instance Configuration Format
+## 📝 注册格式
 
-```json
-{
-  "instance_id": "research-20260308-001",
-  "project_name": "knowledge-assistant-dev",
-  "l1_source": "agent-team-research",
-  "created_at": "2026-03-08T14:55:00Z",
-  "status": "active",
-  "research_goal": "Research goal description",
-  "methodology": "SEARCH-R",
-  "scope": {
-    "depth": "Level 0-2",
-    "areas": ["area1", "area2"]
-  },
-  "deliverables": [
-    {
-      "type": "theory",
-      "path": "{instance-id}-output/theory/",
-      "status": "pending"
-    }
-  ]
-}
+每个研究课题创建一个简单的引用文件：
+
+```markdown
+# 项目名称
+
+**仓库地址**: [项目GitHub地址]
+**研究主题**: 简要描述
+**状态**: Active/Paused/Completed
+**创建时间**: YYYY-MM-DD
 ```
 
-## Usage
+## 📊 已注册课题
 
-### For L1 Agents
+- search-r-methodology-research - 研究SEARCH-R方法论
+- agent-team-research - Agent协作模式研究
+- harness-engineering-research - Harness工程研究
+- sgcc-quality-service-research - 国网优质服务研究
+- （更多研究课题...）
 
-1. Create instance configuration
-   ```bash
-   # Create instance directory
-   mkdir research-instances/{project-name}
-   
-   # Create instance config
-   echo '{instance-config}' > research-instances/{project-name}/{instance-id}.json
-   ```
+## 🔍 使用说明
 
-2. Execute research
-   - Follow SEARCH-R methodology
-   - Record process in log file
-   - Generate deliverables
+### 注册新课题
 
-3. Report results
-   - Update instance status
-   - Notify L1 when complete
+当你使用SEARCH-R创建新的研究课题时：
 
-### For L0 Repository
+1. 创建独立的研究项目仓库
+2. 在本目录创建引用文件 `{project-name}.md`
+3. 填写项目基本信息
 
-- Maintain instance storage
-- Track instance status
-- Provide methodology support
+### 更新课题状态
 
-## Instance Status
-
-- **pending**: Instance created, not started
-- **active**: Research in progress
-- **review**: Awaiting Human review
-- **completed**: Research completed
-- **archived**: Instance archived
-
-## Related
-
-- L0 Repository: SEARCH-R
-- L1 Repository: agent-team-research
-- Methodology: ../methodology/SEARCH-R-cycle.md
+定期更新研究课题的状态：
+- Active：正在进行中
+- Paused：暂时中断
+- Completed：已完成
 
 ---
 
-**Maintainer**: SEARCH-R Framework  
-**Created**: 2026-03-08  
-**Purpose**: L1 research instance storage
+**维护者**: SEARCH-R Framework  
+**创建时间**: 2026-03-08  
+**用途**: 研究实例注册和管理

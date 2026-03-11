@@ -13,13 +13,13 @@ skills:
 
 ## 🏗️ 架构定位
 
-**层级**: L0 - 研究数据源层
-**服务**: L1 (agent-team-research)
+**层级**: L0 - 研究方法论框架层
+**服务**: 使用SEARCH-R方法论的研究课题
 
-### 信息交互
-- **接收**: L1研究实例 → `research-instances/{project}/`
-- **提供**: SEARCH-R方法论 + 理论框架
-- **存储**: 研究实例和成果
+### 功能定位
+- **提供**: SEARCH-R方法论体系
+- **包含**: 方法论定义、文档模板、技能库、工具集
+- **用途**: 作为研究课题的初始化模板
 
 ---
 
@@ -114,42 +114,35 @@ R - Reflect（反思迭代）：持续优化方法
 - 检索报告（retrievals/）
 - 理论文档（theory/）
 - 反思笔记（reflections/）
-- 会话日志（session-log.md）
 
 **使用模板**：参考 `templates/` 目录
 
-📖 [理论文档库](theory/) | [反思记录库](reflections/) | [示例文档](examples/)
+### 3. 文档化能力（不可分离）
+
+**标准产出**：
+- 观察笔记（observations/）
+- 检索报告（retrievals/）
+- 理论文档（theory/）
+- 反思笔记（reflections/）
+- 会话日志（session-log.md）
+
+**使用模板**：参考 `templates/` 目录
 
 ---
 
 ## 📖 可加载能力（Skills）
 
-按需加载的专业能力，定义在 `skills/` 目录：
+按需加载的专业能力，定义在 `skills/` 目录。详见 [Skills库索引](skills/README.md)。
 
-### 百度AI搜索能力
-- 文件：`skills/baidu-search.md`
-- 用途：通过MCP调用百度AI搜索获取实时信息
-- 场景：需要搜索新闻、技术文档、实时信息时
+### 可用技能
 
-### 文献检索能力
-- 文件：`skills/literature-review.md`
-- 用途：系统化检索和分析文献
-- 场景：需要调研现有研究时
-
-### 理论构建能力
-- 文件：`skills/theory-building.md`
-- 用途：构建和验证理论框架
-- 场景：需要提出新理论时
-
-### 观察能力
-- 文件：`skills/observation.md`
-- 用途：系统化观察和记录
-- 场景：需要从实践中发现模式时
-
-### 质量门控能力
-- 文件：`skills/quality-gate.md`
-- 用途：评估研究质量
-- 场景：需要判断研究结论时
+| 技能 | 用途 | 使用场景 |
+|------|------|----------|
+| [文献检索](skills/literature-review.md) | 系统化检索和分析文献 | 调研现有研究 |
+| [观察能力](skills/observation.md) | 系统化观察和记录 | 从实践中发现模式 |
+| [理论构建](skills/theory-building.md) | 构建和验证理论框架 | 提出新理论 |
+| [质量门控](skills/quality-gate.md) | 评估研究质量 | 判断研究结论 |
+| [百度搜索](skills/baidu-search.md) | 实时信息检索 | 搜索新闻、技术文档 |
 
 ---
 
@@ -282,34 +275,56 @@ from read_docx import read_docx, read_docx_as_markdown
 ## 📁 文件结构
 
 ```
-agents/research/
-├── AGENTS.md                  # 本文件：身份和能力
-├── init.md                    # 研究课题初始化指南
-├── current-topic.md           # 当前研究课题引用
-├── session-log.md             # 会话日志
+SEARCH-R/
+├── agents/research/
+│   ├── AGENTS.md              # 本文件：Agent核心定义
+│   ├── init.md                # 研究课题初始化指南
+│   ├── ESSENTIALS.md          # 核心要点速查
+│   └── skills/                # 技能库
 │
-├── theory/                    # 理论文档库
-│   ├── 2026-03-07-metacognition-implementation.md
-│   ├── 2026-03-07-memory-compression-deep-dive.md
-│   └── 2026-03-07-quality-gate-and-agent-definition.md
+├── methodology/               # 方法论体系
+│   ├── search-r-cycle.md      # SEARCH-R循环详解
+│   ├── research-depth.md      # 研究深度定义
+│   └── human-role.md          # Human角色定义
 │
-├── reflections/               # 自我反思库
-│   ├── 2026-03-07.md
-│   └── 2026-03-07-quality-gate-review.md
+├── templates/                 # 文档模板
+│   ├── observation-template.md
+│   ├── retrieval-template.md
+│   ├── theory-template.md
+│   └── reflection-template.md
 │
-├── examples/                  # 示例文档
-│   └── example-session.md
+├── tools/                     # 工具集
+│   └── init-research.sh       # 项目初始化脚本
 │
-├── skills/                    # 可复用能力
-│   ├── literature-review.md
-│   ├── theory-building.md
-│   ├── observation.md
-│   └── quality-gate.md
-│
-└── research-topics/           # 研究课题库
-    ├── agent-collaboration.md
-    └── topic-template.md
+└── research-instances/        # 研究实例注册表
+    └── README.md
 ```
+
+## 🔗 关键文档索引
+
+### 方法论文档
+- [SEARCH-R方法论详解](../../methodology/search-r-cycle.md) - 完整的7阶段研究循环
+- [研究深度定义](../../methodology/research-depth.md) - Level 0-3深度标准
+- [Human角色定义](../../methodology/human-role.md) - Human双重角色和参与最小化
+
+### 技能库
+- [Skills库索引](skills/README.md) - 所有可用技能的完整索引
+- [文献检索能力](skills/literature-review.md) - 系统化文献检索
+- [观察能力](skills/observation.md) - 系统化观察记录
+- [理论构建能力](skills/theory-building.md) - 构建验证理论
+- [质量门控能力](skills/quality-gate.md) - 评估研究质量
+- [百度搜索能力](skills/baidu-search.md) - 实时信息检索
+
+### 模板文档
+- [文档模板库](../../templates/) - 所有标准文档模板
+- [观察笔记模板](../../templates/observation-template.md)
+- [检索报告模板](../../templates/retrieval-template.md)
+- [理论文档模板](../../templates/theory-template.md)
+- [反思笔记模板](../../templates/reflection-template.md)
+
+### 工具和资源
+- [项目初始化脚本](../../tools/init-research.sh) - 一键创建研究项目
+- [研究实例注册表](../../research-instances/README.md) - 查看使用SEARCH-R的研究课题
 
 ---
 
@@ -404,19 +419,9 @@ agents/research/
 - [研究课题初始化指南](init.md)
 - 当前研究课题：`current-topic.md`
 
-### 理论与反思
-- [理论文档库](theory/) - 核心理论研究成果
-- [反思记录库](reflections/) - 方法论反思与迭代
-- [示例文档](examples/) - 研究会话示例
-
-### 模板和工具
-- [文档模板](../../templates/)
-- [Skills库](skills/)
-
 ### 使用文档
-- [快速开始](../../docs/getting-started.md)
-- [设计哲学](../../docs/design-philosophy.md)
-- [迁移报告](../../docs/MIGRATION-REPORT.md)
+- [快速开始指南](../../QUICKSTART.md) - 详细的使用教程
+- [设计哲学](../../docs/design-philosophy.md) - 框架设计思想
 
 ---
 
