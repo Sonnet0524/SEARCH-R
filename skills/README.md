@@ -1,157 +1,135 @@
 # Skills - 研究技能库
 
-本目录包含Research Agent可用的研究技能。每个技能都是一个独立的目录，包含SKILL.md定义文件。
+本目录包含Research Agent可用的研究技能，遵循Skills v2.0标准。
 
-## 📁 目录结构
+## 核心原则
+
+1. **Context Window is a Public Good** - 每个token都要有价值
+2. **Progressive Disclosure** - 渐进式加载
+3. **Skills可调用Tools** - 协作关系
+
+## 目录结构
 
 ```
 skills/
-├── README.md                  # 本文件：技能库使用指南
-├── literature-review/         # 文献检索技能
-│   └── SKILL.md
-├── observation/               # 观察技能
-│   └── SKILL.md
-├── theory-building/           # 理论构建技能
-│   └── SKILL.md
-├── quality-gate/              # 质量门控技能
-│   └── SKILL.md
-└── baidu-search/              # 百度搜索技能
+├── README.md
+│
+├── web-search/           # [tool] 网络搜索
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   └── search_api.py
+│   └── references/
+│
+├── file-reading/         # [tool] 文件阅读
+│   ├── SKILL.md
+│   └── references/
+│
+├── document-output/      # [tool] 文档输出
+│   ├── SKILL.md
+│   └── references/
+│
+├── literature-review/    # [ability] 文献检索
+│   ├── SKILL.md
+│   └── references/
+│
+├── observation/          # [ability] 观察记录
+│   ├── SKILL.md
+│   └── references/
+│
+├── theory-building/      # [ability] 理论构建
+│   ├── SKILL.md
+│   └── references/
+│
+└── quality-gate/         # [ability] 质量门控
     ├── SKILL.md
-    └── scripts/               # 实现脚本
-        └── baidu_web_search_api.py
+    └── references/
 ```
 
-## 📋 可用技能
+## 技能分类
 
-### 文献检索能力 (literature-review)
-- **用途**: 系统化检索和分析文献
-- **场景**: 调研现有研究、梳理知识图谱
-- **详情**: [literature-review/SKILL.md](literature-review/SKILL.md)
+| 类型 | 说明 | 技能 |
+|------|------|------|
+| **tool** | 底层工具，可执行脚本 | web-search, file-reading, document-output |
+| **ability** | 业务能力，方法论指导 | literature-review, observation, theory-building, quality-gate |
 
-### 观察能力 (observation)
-- **用途**: 系统化观察和记录
-- **场景**: 从实践中发现模式和问题
-- **详情**: [observation/SKILL.md](observation/SKILL.md)
+## 技能列表
 
-### 理论构建能力 (theory-building)
-- **用途**: 构建和验证理论框架
-- **场景**: 提出新理论、建立模型
-- **详情**: [theory-building/SKILL.md](theory-building/SKILL.md)
+| 技能 | 类型 | 触发条件 | 用途 |
+|------|------|---------|------|
+| [web-search](web-search/SKILL.md) | tool | "搜索"、"查找"、"检索" | 网络搜索获取实时信息 |
+| [file-reading](file-reading/SKILL.md) | tool | "读取"、"解析"文件 | 读取PDF/Word/Excel等 |
+| [document-output](document-output/SKILL.md) | tool | "生成报告"、"输出文档" | 生成格式化文档 |
+| [literature-review](literature-review/SKILL.md) | ability | "检索文献"、"调研研究" | 文献检索与分析 |
+| [observation](observation/SKILL.md) | ability | "观察"、"记录发现" | 系统化观察记录 |
+| [theory-building](theory-building/SKILL.md) | ability | "构建理论"、"建立模型" | 理论构建与验证 |
+| [quality-gate](quality-gate/SKILL.md) | ability | 研究结论需验证时 | 质量评估与介入决策 |
 
-### 质量门控能力 (quality-gate)
-- **用途**: 评估研究质量
-- **场景**: 判断研究结论、决定Human介入时机
-- **详情**: [quality-gate/SKILL.md](quality-gate/SKILL.md)
-
-### 百度搜索能力 (baidu-search)
-- **用途**: 实时信息检索
-- **场景**: 搜索新闻、技术文档、实时信息
-- **实现**: 提供Python API脚本
-- **详情**: [baidu-search/SKILL.md](baidu-search/SKILL.md)
-
-## 🔧 使用方法
-
-### 1. 查看技能定义
-
-每个技能目录下都有SKILL.md文件，包含：
-- 技能说明和能力范围
-- 使用场景和触发条件
-- 执行流程和参数说明
-- 示例对话
-
-### 2. 在研究中应用
-
-```markdown
-# 在研究过程中使用技能
-
-## Survey阶段
-使用 [观察技能](observation/SKILL.md) 记录发现
-
-## Explore阶段
-使用 [文献检索技能](literature-review/SKILL.md) 检索资料
-使用 [百度搜索技能](baidu-search/SKILL.md) 搜索实时信息
-
-## Analyze阶段
-使用 [理论构建技能](theory-building/SKILL.md) 构建理论
-
-## 各阶段
-使用 [质量门控技能](quality-gate/SKILL.md) 评估研究质量
-```
-
-### 3. 使用技能脚本
-
-部分技能提供实现脚本（如baidu-search）：
-
-```bash
-# 使用百度搜索API
-cd skills/baidu-search/scripts
-python3 baidu_web_search_api.py --query "搜索关键词" --top_k 10
-```
-
-## 📝 添加新技能
-
-### 技能模板结构
+## Skills vs Tools
 
 ```
-{skill-name}/
-├── SKILL.md              # 必需：技能定义文件
-└── scripts/              # 可选：实现脚本
-    └── {script-name}.py
+Skills (Markdown文档)
+    ↓ 指导/调用
+Tools (Python实现)
+    ↓ 执行
+外部API / 文件系统
 ```
 
-### SKILL.md格式
+- **Skills**: 给LLM看的指令文档
+- **Tools**: 实际执行的代码
+- Skills可以调用Tools
 
-```markdown
+## SKILL.md规范
+
+```yaml
 ---
-skill_id: skill-name
-name: 技能名称
-description: 技能简要描述
-version: 1.0.0
-skill_type: ability
-category: research
-triggers:
-  - "触发词1"
-  - "触发词2"
-tags:
-  - tag1
-  - tag2
+name: skill-name
+description: 功能描述 + 触发条件。Use when user asks to "trigger1", "trigger2".
+trigger: on_demand
+tags: tag1, tag2
 ---
+```
 
-# 技能名称
+**要求**:
+- Frontmatter仅4个字段
+- description包含触发条件
+- Body < 200行
 
-## 概述
-详细描述技能的用途和特点
+## Scripts规范
 
-## 能力范围
-### ✅ 可以做
-- 能力1
-- 能力2
-
-### ❌ 不能做
-- 限制1
-- 限制2
-
-## 使用场景
-场景描述和示例
+```python
+# scripts/api.py
+# - 每个文件 < 80行
+# - 只依赖Python标准库
+# - API Key从环境变量读取
+```
 
 ## 使用方法
-详细的使用说明
 
-## 参考资料
-相关文档和资源
+### 1. Tool类型技能
+```python
+# 调用web-search
+from skills.web_search.scripts.search_api import search
+
+result = search(query="关键词", top_k=10)
 ```
 
-## 🔗 相关资源
+### 2. Ability类型技能
+```markdown
+# 按SKILL.md中的方法指导执行
+1. 阅读SKILL.md理解方法论
+2. 按Execution Flow执行
+3. 使用Usage Patterns参考
+4. 输出符合Output Format
+```
 
-### 方法论文档
+## 相关资源
+
 - [SEARCH-R循环](../methodology/search-r-cycle.md)
 - [研究深度定义](../methodology/research-depth.md)
-
-### 模板文档
 - [文档模板库](../templates/)
 
 ---
 
-**创建时间**: 2026-03-11  
-**用途**: 研究技能库使用指南  
+**版本**: v2.0  
+**更新时间**: 2026-03-11  
 **维护者**: SEARCH-R Framework
