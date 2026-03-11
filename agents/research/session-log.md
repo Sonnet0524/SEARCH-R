@@ -586,3 +586,180 @@ SEARCH-R (L0)
 **记录时间**: 2026-03-09  
 **会话类型**: 独立仓库创建 + Git推送  
 **会话状态**: ✅ 已完成
+
+---
+
+## [2026-03-11] Karpathy autoresearch项目分析与百度搜索API集成
+
+### 会话主题
+研究Karpathy的autoresearch项目，分析其与SEARCH-R的关系，并集成百度搜索API替代MCP版本。
+
+### 主要工作
+
+#### 1. Karpathy autoresearch项目调研
+
+**项目发现**：
+- 用户提到"k神"开源的research项目
+- 通过百度搜索API找到：k神 = Andrej Karpathy（OpenAI联合创始人，前Tesla AI总监）
+- 项目地址：https://github.com/karpathy/autoresearch
+- Star数：24.6k（2026-03-11）
+
+**核心思想**：
+> "给AI agent一个小型但真实的LLM训练设置，让它自主进行实验过夜。它修改代码，训练5分钟，检查结果是否改进，保留或丢弃，然后重复。"
+
+**项目架构**：
+```
+prepare.py  — 数据准备、运行时工具（不修改）
+train.py    — 模型、优化器、训练循环（agent修改）
+program.md  — agent指令（人类修改）
+```
+
+**关键设计原则**：
+- 单文件修改：agent只修改train.py
+- 固定时间预算：每次训练5分钟
+- 自包含：无外部复杂依赖，单GPU即可运行
+
+#### 2. autoresearch与SEARCH-R对比分析
+
+**相似之处**：
+- 方法论驱动：都试图将研究过程标准化
+- 文档化核心：autoresearch的program.md vs SEARCH-R的AGENTS.md
+- agent辅助：都利用AI agent增强能力
+
+**关键差异**：
+| 维度 | autoresearch | SEARCH-R |
+|------|--------------|----------|
+| 研究类型 | 自动化实验优化 | 系统化知识探索 |
+| 循环周期 | 5分钟/次 | 数天/阶段 |
+| 优化目标 | 单一指标（val_bpb） | 多维度产出 |
+| agent角色 | 实验执行者 | 研究助手 |
+| 人类参与 | 设定目标和审查 | 关键决策点参与 |
+| 自动化程度 | 完全自动化（过夜运行） | 半自动化（Human在关键点参与） |
+
+**互补关系**：
+- autoresearch可以用SEARCH-R方法论设计program.md
+- SEARCH-R可以用autoresearch验证研究流程自动化
+
+**可借鉴设计**：
+1. 固定时间预算机制：每个研究阶段设定时间预算
+2. 单一文件修改原则：明确agent的修改范围
+3. 日志驱动的进度追踪：自动记录研究过程
+4. 迭代式改进机制：保留有效发现，丢弃无效路径
+
+#### 3. 百度搜索API集成
+
+**背景**：
+- 原MCP版本的百度搜索工具频繁超时
+- 用户要求使用SGCC仓库中的API版本
+
+**集成过程**：
+1. ✅ 复制baidu-search.md到SEARCH-R/skills目录
+2. ✅ 复制baidu_web_search_api.py到SEARCH-R/skills目录
+3. ✅ 创建search-logs目录
+4. ✅ 更新opencode.json，移除MCP配置
+5. ✅ 验证API密钥配置（.env.local已存在）
+6. ✅ 测试搜索功能正常工作
+
+**集成结果**：
+- 成功搜索到5条关于"SEARCH-R方法论 AI研究"的结果
+- 响应时间：1408ms
+- 自动生成搜索日志：search-logs/2026-03-11.jsonl
+
+**发现**：
+- 搜索结果中有大量关于"Search-R1"的内容
+- Search-R1是一个基于强化学习的RAG框架
+- 与SEARCH-R的命名很相似，但定位不同
+
+#### 4. 创建观察笔记
+
+**文件**: `observations/2026-03-11-karpathy-autoresearch-analysis.md`
+
+**内容包含**：
+- autoresearch项目背景和核心理念
+- 项目架构设计分析
+- autoresearch与SEARCH-R的对比
+- 可借鉴的设计原则
+- 对SEARCH-R的启发
+- 后续行动计划
+
+### 会话统计
+
+- **会话时长**：约1小时
+- **创建文件**：2个
+  - observations/2026-03-11-karpathy-autoresearch-analysis.md
+  - skills/README.md
+- **复制文件**：2个
+  - skills/baidu-search.md
+  - skills/baidu_web_search_api.py
+- **修改文件**：2个
+  - opencode.json（移除MCP配置）
+  - session-log.md（本次记录）
+- **搜索测试**：1次（成功）
+
+### 关键发现
+
+#### 发现1：autoresearch的平民化理念
+
+**观察**：
+- 单GPU即可运行
+- 5分钟预算，约100次实验/晚
+- 使前沿AI研究不再依赖大规模算力
+
+**启示**：
+- SEARCH-R也应追求平民化
+- 降低研究门槛，让更多人可以用AI辅助研究
+
+#### 发现2：文档驱动的研究控制
+
+**观察**：
+- program.md扮演"研究组织代码"的角色
+- 控制agent的研究策略
+- 可以迭代优化program.md本身
+
+**启示**：
+- SEARCH-R的AGENTS.md可以进一步优化
+- 设计更像"研究组织代码"的结构
+
+#### 发现3：固定时间预算的价值
+
+**观察**：
+- 每次实验5分钟
+- 使实验可比较
+- 自动适应平台算力
+
+**启示**：
+- 为SEARCH-R每个阶段设定时间预算
+- 使研究进度可控、可预测
+
+### 待办事项
+
+**短期（本周）**：
+- [ ] 深入阅读autoresearch源码
+- [ ] 分析program.md的设计思路
+- [ ] 提取可复用的方法论元素
+
+**中期（本月）**：
+- [ ] 设计SEARCH-R的"program.md"模板
+- [ ] 建立研究循环的自动化机制
+- [ ] 完善质量门控设计
+
+**长期（本季度）**：
+- [ ] 在实践课题中验证改进效果
+- [ ] 建立autoresearch与SEARCH-R的集成方案
+- [ ] 形成完整的研究方法论体系
+
+### 质量门控评估
+
+**当前评估**：
+- 确定性：HIGH - autoresearch项目理解清晰，对比分析到位
+- 可接受性：HIGH - 百度搜索API集成成功，观察笔记完整
+- 认知混淆：NONE - 对两个框架的定位和关系理解准确
+
+**结论**：本次工作完成质量高，可以结束会话
+
+---
+
+**记录者**: Research Agent  
+**记录时间**: 2026-03-11  
+**会话类型**: 竞品分析 + 工具集成 + 文档创建  
+**会话状态**: ✅ 已完成
