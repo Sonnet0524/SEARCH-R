@@ -7,7 +7,7 @@
 *A Methodology Framework for AI Agent Research*
 
 [![Version](https://img.shields.io/badge/version-1.1-blue.svg)](https://github.com/Sonnet0524/SEARCH-R)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 
 **L0 - Research Data Source Layer**
@@ -479,7 +479,9 @@ SEARCH-R/
 
 ## 许可
 
-MIT License
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+
+本项目采用 GNU Affero General Public License v3.0 (AGPL v3.0) 协议开源。
 
 ---
 
