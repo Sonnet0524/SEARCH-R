@@ -22,3 +22,8 @@ Thumbs.db
 # Dependencies (if any in the future)
 node_modules/
 vendor/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
