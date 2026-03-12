@@ -49,6 +49,45 @@ Agent本体（不变）
 
 ## 🚀 初始化新研究课题
 
+### Step 0: 确认使用环境（重要）
+
+**必须首先询问用户的使用环境**，根据环境配置相应的配置文件：
+
+#### OpenCode 环境
+
+如果用户使用 **OpenCode** 工具，需要创建标准的 `opencode.json` 配置文件：
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "research-agent": {
+      "description": "Research Agent - [研究课题名称]",
+      "mode": "primary",
+      "prompt": "{file:./agents/research/AGENTS.md}",
+      "skills": [
+        "literature-review",
+        "observation",
+        "quality-gate",
+        "theory-building",
+        "baidu-search"
+      ]
+    }
+  }
+}
+```
+
+**关键要点**：
+- `description`: 根据研究课题定制描述
+- `prompt`: 指向 AGENTS.md 文件路径
+- `skills`: 定义可用的技能模块
+
+#### 其他环境
+
+如果用户使用其他环境（如 Claude Code、Cursor等），询问用户是否需要特定的配置文件。
+
+---
+
 ### Step 1: 创建研究课题配置文件
 
 在 `research-topics/` 目录下创建新的研究课题文件：
@@ -243,18 +282,30 @@ active → completed (完成)
 ```
 好的，我将创建一个新的研究课题：Agent记忆系统设计
 
-创建文件：research-topics/agent-memory-system.md
-填写配置：
-- 研究背景：Agent需要有效的记忆系统
-- 研究目标：设计Agent记忆系统架构
-- 核心问题：
-  1. 记忆应该分为哪些类型？
-  2. 如何实现记忆的按需加载？
-  3. 如何实现记忆的压缩和遗忘？
+首先，请确认您的使用环境：
+1. OpenCode
+2. 其他环境（请说明）
 
-更新 current-topic.md 指向新课题
+**Human**: "我使用OpenCode"
+
+好的，我将为OpenCode环境配置研究项目：
+
+1. 创建标准配置文件：opencode.json
+   - 配置Research Agent
+   - 定义可用技能
+
+2. 创建研究课题配置：research-topics/agent-memory-system.md
+   - 研究背景：Agent需要有效的记忆系统
+   - 研究目标：设计Agent记忆系统架构
+   - 核心问题：
+     1. 记忆应该分为哪些类型？
+     2. 如何实现记忆的按需加载？
+     3. 如何实现记忆的压缩和遗忘？
+
+3. 更新 current-topic.md 指向新课题
 
 ✅ 研究课题创建完成
+✅ opencode.json 配置完成
 是否现在开始研究？
 ```
 
@@ -325,25 +376,46 @@ active → completed (完成)
 ## 📁 目录结构
 
 ```
-agents/research/
-├── AGENTS.md                  # Agent身份和能力（不变）
-├── init.md                    # 本文件：初始化指南
-├── current-topic.md           # 当前激活的研究课题引用
-├── research-topics/           # 研究课题库
-│   ├── agent-collaboration.md
-│   ├── quality-gates.md
-│   └── [your-topic].md
-├── skills/                    # 可复用能力
-│   ├── literature-review.md
-│   ├── theory-building.md
-│   ├── observation.md
-│   └── quality-gate.md
-└── session-log.md             # 会话日志
+研究项目根目录/
+├── opencode.json               # OpenCode环境配置文件
+├── agents/research/
+│   ├── AGENTS.md               # Agent身份和能力（不变）
+│   ├── init.md                 # 本文件：初始化指南
+│   ├── current-topic.md        # 当前激活的研究课题引用
+│   ├── research-topics/        # 研究课题库
+│   │   ├── agent-collaboration.md
+│   │   ├── quality-gates.md
+│   │   └── [your-topic].md
+│   ├── skills/                 # 可复用能力
+│   │   ├── literature-review.md
+│   │   ├── theory-building.md
+│   │   ├── observation.md
+│   │   └── quality-gate.md
+│   └── session-log.md          # 会话日志
+└── methodology/                # 方法论体系（从SEARCH-R复制）
+    ├── search-r-cycle.md
+    ├── research-depth.md
+    └── human-role.md
 ```
+
+### 配置文件说明
+
+| 文件 | 用途 | 何时创建 |
+|------|------|----------|
+| `opencode.json` | OpenCode环境配置 | 初始化时根据环境创建 |
+| `AGENTS.md` | Agent核心定义 | 从SEARCH-R复制 |
+| `current-topic.md` | 当前课题引用 | 创建第一个课题时 |
+| `research-topics/*.md` | 课题配置文件 | 创建新课题时 |
 
 ---
 
 ## 🎓 最佳实践
+
+### 环境配置
+
+1. **优先询问环境** - 初始化时首先确认用户的使用环境
+2. **创建标准配置** - OpenCode环境必须创建opencode.json
+3. **路径引用正确** - AGENTS.md中的路径要适配项目结构
 
 ### 课题创建
 
