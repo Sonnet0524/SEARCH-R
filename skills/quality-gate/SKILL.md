@@ -120,11 +120,16 @@ IF 确定性=MEDIUM OR 可接受性=MEDIUM:
     → DIRECTION介入，请求方向指导
 ```
 
-## Related Skills
+## Related Skills & Tools
 
+### Related Skills
 - **observation**: 观察质量评估
 - **theory-building**: 理论质量检验
 - **literature-review**: 文献质量评估
+
+### Related Tools
+- **baidu-scholar-search**: 验证文献来源
+- **document-output**: 输出评估报告（建设中）
 
 ## References
 

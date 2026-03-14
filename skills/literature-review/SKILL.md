@@ -96,11 +96,18 @@ User: "建立这个领域的知识图谱"
 | 权威性 | 引用高质量来源 |
 | 结构性 | 清晰的分类体系 |
 
-## Related Skills
+## Related Skills & Tools
 
-- **web-search**: 获取在线文献
-- **file-reading**: 解析文献文件
+### Related Skills
+- **observation**: 基于观察发现研究问题
 - **theory-building**: 基于文献构建理论
+- **quality-gate**: 评估文献质量
+
+### Related Tools
+- **baidu-scholar-search**: 学术文献检索（推荐）
+- **baidu-search**: 网络信息搜索
+- **baidu-baike-data**: 概念定义查询
+- **file-reading**: 解析文献文件（建设中）
 
 ## References
 

@@ -43,12 +43,14 @@ SEARCH-R Research Project Initializer
 选项:
     -d, --description  项目描述
     -g, --git          初始化Git仓库（默认：是）
+    -e, --environment  使用环境 (opencode|other)，默认自动检测
     -h, --help         显示此帮助信息
 
 示例:
     ./init-research.sh my-research-project
     ./init-research.sh my-research-project -d "我的研究项目"
     ./init-research.sh my-research-project --description "研究AI" --git
+    ./init-research.sh my-research-project -e opencode
 
 EOF
 }
@@ -63,6 +65,7 @@ fi
 PROJECT_NAME=""
 PROJECT_DESC=""
 INIT_GIT=true
+ENVIRONMENT=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -82,6 +85,10 @@ while [[ $# -gt 0 ]]; do
             INIT_GIT=false
             shift
             ;;
+        -e|--environment)
+            ENVIRONMENT="$2"
+            shift 2
+            ;;
         *)
             if [ -z "$PROJECT_NAME" ]; then
                 PROJECT_NAME="$1"
@@ -97,6 +104,17 @@ if [ -z "$PROJECT_NAME" ]; then
     exit 1
 fi
 
+# 自动检测环境
+if [ -z "$ENVIRONMENT" ]; then
+    if [ -f "opencode.json" ]; then
+        ENVIRONMENT="opencode"
+        print_info "检测到OpenCode环境"
+    else
+        ENVIRONMENT="other"
+        print_info "未检测到OpenCode环境，使用通用配置"
+    fi
+fi
+
 # 检查项目目录是否已存在
 if [ -d "../$PROJECT_NAME" ]; then
     print_error "目录 ../$PROJECT_NAME 已存在"
@@ -108,7 +126,8 @@ echo ""
 
 # 创建项目目录
 print_info "创建项目目录结构..."
-mkdir -p "../$PROJECT_NAME"/{research/{observations,retrievals,theory,reflections},templates,skills,references,tools}
+mkdir -p "../$PROJECT_NAME"/{research/{observations,retrievals,theory,reflections},templates,references,tools}
+mkdir -p "../$PROJECT_NAME/agents/research"
 
 # 复制模板文件
 print_info "复制模板文件..."
@@ -135,12 +154,55 @@ cp agents/research/research-topics/README.md "../$PROJECT_NAME/agents/research/r
 
 # 复制技能库
 print_info "复制技能库..."
-cp -r agents/research/skills/*.md "../$PROJECT_NAME/skills/"
+mkdir -p "../$PROJECT_NAME/agents/research/skills"
+if [ -d "skills" ]; then
+    # 从根目录的skills/复制到新项目的agents/research/skills/
+    cp -r skills/* "../$PROJECT_NAME/agents/research/skills/"
+    print_success "已复制skills目录到 agents/research/skills/（包含所有技能文件）"
+else
+    print_warning "未找到根目录的skills/目录"
+    # 尝试从agents/research/skills/复制（兼容旧结构）
+    if [ -d "agents/research/skills" ]; then
+        cp -r agents/research/skills/* "../$PROJECT_NAME/agents/research/skills/"
+        print_success "已从agents/research/skills/复制"
+    else
+        print_warning "未找到skills目录，跳过"
+    fi
+fi
 
 # 复制示例
 print_info "复制示例..."
 mkdir -p "../$PROJECT_NAME/examples"
-cp -r agents/research/examples/* "../$PROJECT_NAME/examples/"
+if [ -d "agents/research/examples" ]; then
+    cp -r agents/research/examples/* "../$PROJECT_NAME/examples/" 2>/dev/null || true
+fi
+
+# 创建opencode.json配置（如果是OpenCode环境）
+if [ "$ENVIRONMENT" = "opencode" ]; then
+    print_info "创建OpenCode配置..."
+    cat > "../$PROJECT_NAME/opencode.json" << EOF
+{
+  "\$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "research-agent": {
+      "description": "Research Agent - ${PROJECT_DESC:-$PROJECT_TITLE}",
+      "mode": "primary",
+      "prompt": "{file:./agents/research/AGENTS.md}",
+      "skills": [
+        "literature-review",
+        "observation",
+        "quality-gate",
+        "theory-building",
+        "web-search",
+        "file-reading",
+        "document-output"
+      ]
+    }
+  }
+}
+EOF
+    print_success "已创建opencode.json配置"
+fi
 
 # 创建.gitignore
 print_info "创建.gitignore..."
@@ -223,12 +285,14 @@ ${PROJECT_DESC:-研究项目说明}
 \`\`\`
 $PROJECT_NAME/
 ├── README.md                    # 项目说明
+$(if [ "$ENVIRONMENT" = "opencode" ]; then echo "├── opencode.json               # OpenCode配置"; fi)
 ├── methodology/                 # SEARCH-R方法论
 ├── agents/research/            # Agent配置
 │   ├── AGENTS.md               # Agent定义
 │   ├── init.md                 # 初始化指南
 │   ├── current-topic.md        # 当前研究课题
-│   └── session-log.md          # 会话日志
+│   ├── session-log.md          # 会话日志
+│   └── skills/                 # 技能库
 ├── research/                    # 研究目录
 │   ├── topic.md                # 课题定义
 │   ├── observations/           # 观察笔记
@@ -236,7 +300,6 @@ $PROJECT_NAME/
 │   ├── theory/                 # 理论文档
 │   └── reflections/            # 反思笔记
 ├── templates/                   # 文档模板
-├── skills/                      # 研究技能
 ├── references/                  # 参考资料
 └── tools/                       # 工具
 
@@ -435,10 +498,20 @@ echo ""
 print_success "研究项目创建完成！"
 echo ""
 print_info "项目位置: ../$PROJECT_NAME"
+if [ "$ENVIRONMENT" = "opencode" ]; then
+    print_success "OpenCode配置: opencode.json 已创建"
+fi
 print_info "下一步操作:"
 echo "  1. cd ../$PROJECT_NAME"
 echo "  2. 编辑 research/topic.md 定义研究课题"
 echo "  3. 开始使用SEARCH-R方法论进行研究"
+if [ "$ENVIRONMENT" = "opencode" ]; then
+    echo ""
+    print_info "OpenCode环境:"
+    echo "  - 配置文件: opencode.json"
+    echo "  - Agent: research-agent"
+    echo "  - 可用技能: literature-review, observation, quality-gate, theory-building, web-search, file-reading, document-output"
+fi
 echo ""
 print_info "查看文档:"
 echo "  - README.md: 项目说明"

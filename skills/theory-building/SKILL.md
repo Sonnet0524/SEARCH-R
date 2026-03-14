@@ -110,11 +110,17 @@ User: "验证这个理论的有效性"
 - **预测力**: 能预测未来现象
 - **简洁性**: 奥卡姆剃刀原则
 
-## Related Skills
+## Related Skills & Tools
 
+### Related Skills
 - **literature-review**: 理论文献调研
 - **observation**: 观察数据支撑
 - **quality-gate**: 理论质量评估
+
+### Related Tools
+- **baidu-scholar-search**: 理论文献检索
+- **baidu-baike-data**: 概念定义查询
+- **document-output**: 输出理论文档（建设中）
 
 ## References
 

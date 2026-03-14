@@ -3,9 +3,13 @@ name: file-reading
 description: 读取和解析各类文件内容。当用户要求"读取"、"解析"、"查看"PDF、Word、Excel、Markdown等文件时触发。
 trigger: on_demand
 tags: 文件处理, PDF, Word, Excel, 解析
+status: draft
+implementation: pending
 ---
 
 # File Reading Skill
+
+> **状态**: 🚧 设计中 - 脚本待实现
 
 读取和解析各类文件，提取结构化内容。
 
@@ -28,7 +32,10 @@ tags: 文件处理, PDF, Word, Excel, 解析
 
 ## Tool Call
 
+> ⚠️ **待实现**: 以下接口为设计规范，脚本尚未编写
+
 ```python
+# TODO: 待实现 scripts/reader.py
 from skills.file_reading.scripts.reader import read_file
 
 # 读取文件

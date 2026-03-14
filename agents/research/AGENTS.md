@@ -1,7 +1,7 @@
 ---
 description: Research Agent - 使用SEARCH-R方法论进行系统性研究
 mode: primary
-version: 1.1
+version: 2.0
 skills:
   - literature-review
   - observation
@@ -130,35 +130,58 @@ R - Reflect（反思迭代）：持续优化方法
 
 ---
 
-## 📖 可加载能力（Skills）
+## 📖 可加载能力
 
-按需加载的专业能力，定义在 `skills/` 目录。详见 [Skills库索引](skills/README.md)。
+### Skills（业务能力）
 
-### 可用技能
+按需加载的业务能力，定义在 `skills/` 目录。
 
 | 技能 | 用途 | 使用场景 |
 |------|------|----------|
-| [文献检索](skills/literature-review.md) | 系统化检索和分析文献 | 调研现有研究 |
-| [观察能力](skills/observation.md) | 系统化观察和记录 | 从实践中发现模式 |
-| [理论构建](skills/theory-building.md) | 构建和验证理论框架 | 提出新理论 |
-| [质量门控](skills/quality-gate.md) | 评估研究质量 | 判断研究结论 |
-| [百度搜索](skills/baidu-search.md) | 实时信息检索 | 搜索新闻、技术文档 |
+| [文献检索](skills/literature-review/SKILL.md) | 系统化检索和分析文献 | 调研现有研究 |
+| [观察能力](skills/observation/SKILL.md) | 系统化观察和记录 | 从实践中发现模式 |
+| [理论构建](skills/theory-building/SKILL.md) | 构建和验证理论框架 | 提出新理论 |
+| [质量门控](skills/quality-gate/SKILL.md) | 评估研究质量 | 判断研究结论 |
 
----
+### Tools（底层工具）
 
-## 📂 文件阅读能力
+底层可执行工具，定义在 `tools/` 目录。详见 [Tools库索引](tools/README.md)。
 
-使用共享工具仓库 [shared-tools](https://github.com/Sonnet0524/shared-tools) 读取各类文件：
+| 工具 | 用途 | 状态 | 触发条件 |
+|------|------|:----:|---------|
+| [百度搜索](tools/baidu-search/SKILL.md) | 百度AI搜索（全球下载量第一） | ✅ | "百度搜索"、"全网搜索" |
+| [百度学术](tools/baidu-scholar-search/SKILL.md) | 百度学术文献检索 | ✅ | "学术搜索"、"论文搜索" |
+| [百度百科](tools/baidu-baike-data/SKILL.md) | 百度百科 词条查询 | ✅ | "百科查询"、"词条解释" |
+| [文档解析](tools/paddleocr-doc-parsing/SKILL.md) | 高级文档解析（表格、公式、图表） | ⚠️ | "解析文档"、"提取表格/公式" |
+| [文字识别](tools/paddleocr-text-recognition/SKILL.md) | 图像/PDF文字识别 | ⚠️ | "识别文字"、"OCR"、"提取文字" |
+| [异步OCR](tools/paddleocr-async/SKILL.md) | PaddleOCR异步API调用 | ✅ | "异步OCR"、"大文件识别" |
+| [文件阅读](tools/file-reading/SKILL.md) | 读取PDF/Word/Excel等 | 🚧 | "读取"、"解析"文件 |
+| [文档输出](tools/document-output/SKILL.md) | 生成格式化文档 | 🚧 | "生成报告"、"输出文档" |
 
-```python
-import sys
-sys.path.insert(0, r'D:\opencode\github\shared-tools')
+**状态说明**：
+- ✅ 已测试 - 功能正常，可直接使用
+- ⚠️ 待测试 - 需要API配置（[专属URL获取指南](../../API_KEYS_SETUP.md#paddleocr_ocr_api_url)）
+- 🚧 建设中 - 脚本待实现，功能受限
 
-from read_excel import read_excel, read_excel_as_markdown
-from read_docx import read_docx, read_docx_as_markdown
+### Skills vs Tools
+
+```
+Skills (业务能力)
+    ↓ 指导方法论
+    ↓ 可调用
+Tools (底层工具)
+    ↓ 执行代码
+外部API / 文件系统
 ```
 
-支持的格式：`.xlsx`, `.xlsm`, `.xls`, `.et`, `.docx`
+**协作示例**：
+```
+literature-review (Skill)
+    ↓ 调用
+baidu-scholar-search (Tool)
+    ↓ 执行
+百度学术API
+```
 
 ---
 
@@ -279,8 +302,26 @@ SEARCH-R/
 ├── agents/research/
 │   ├── AGENTS.md              # 本文件：Agent核心定义
 │   ├── init.md                # 研究课题初始化指南
-│   ├── ESSENTIALS.md          # 核心要点速查
-│   └── skills/                # 技能库
+│   └── ESSENTIALS.md          # 核心要点速查
+│
+├── skills/                    # 业务能力（Skills）
+│   ├── README.md              # Skills库索引
+│   ├── literature-review/     # 文献检索
+│   ├── observation/           # 观察记录
+│   ├── theory-building/       # 理论构建
+│   └── quality-gate/          # 质量门控
+│
+├── tools/                     # 底层工具
+│   ├── README.md              # Tools库索引
+│   ├── baidu-search/          # 百度搜索
+│   ├── baidu-scholar-search/  # 百度学术
+│   ├── baidu-baike-data/      # 百度百科
+│   ├── paddleocr-doc-parsing/     # 文档解析
+│   ├── paddleocr-text-recognition/ # 文字识别
+│   ├── paddleocr-async/       # 异步OCR
+│   ├── file-reading/          # 文件阅读
+│   ├── document-output/       # 文档输出
+│   └── init-research.sh       # 项目初始化脚本
 │
 ├── methodology/               # 方法论体系
 │   ├── search-r-cycle.md      # SEARCH-R循环详解
@@ -292,9 +333,6 @@ SEARCH-R/
 │   ├── retrieval-template.md
 │   ├── theory-template.md
 │   └── reflection-template.md
-│
-├── tools/                     # 工具集
-│   └── init-research.sh       # 项目初始化脚本
 │
 └── research-instances/        # 研究实例注册表
     └── README.md
@@ -308,12 +346,25 @@ SEARCH-R/
 - [Human角色定义](../../methodology/human-role.md) - Human双重角色和参与最小化
 
 ### 技能库
-- [Skills库索引](skills/README.md) - 所有可用技能的完整索引
-- [文献检索能力](skills/literature-review.md) - 系统化文献检索
-- [观察能力](skills/observation.md) - 系统化观察记录
-- [理论构建能力](skills/theory-building.md) - 构建验证理论
-- [质量门控能力](skills/quality-gate.md) - 评估研究质量
-- [百度搜索能力](skills/baidu-search.md) - 实时信息检索
+- [Skills库索引](skills/README.md) - 业务能力完整索引
+  - [文献检索能力](skills/literature-review/SKILL.md) - 系统化文献检索
+  - [观察能力](skills/observation/SKILL.md) - 系统化观察记录
+  - [理论构建能力](skills/theory-building/SKILL.md) - 构建验证理论
+  - [质量门控能力](skills/quality-gate/SKILL.md) - 评估研究质量
+
+### 工具库
+- [Tools库索引](tools/README.md) - 底层工具完整索引
+- **百度系列**
+  - [百度搜索](tools/baidu-search/SKILL.md) - 百度AI搜索
+  - [百度学术](tools/baidu-scholar-search/SKILL.md) - 学术文献检索
+  - [百度百科](tools/baidu-baike-data/SKILL.md) - 词条查询
+- **PaddleOCR系列**
+  - [文档解析](tools/paddleocr-doc-parsing/SKILL.md) - 高级文档解析
+  - [文字识别](tools/paddleocr-text-recognition/SKILL.md) - 图像OCR
+  - [异步OCR](tools/paddleocr-async/SKILL.md) - 异步API调用
+- **通用工具**
+  - [文件阅读](tools/file-reading/SKILL.md) - 读取多种格式文件（建设中）
+  - [文档输出](tools/document-output/SKILL.md) - 生成格式化文档（建设中）
 
 ### 模板文档
 - [文档模板库](../../templates/) - 所有标准文档模板

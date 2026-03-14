@@ -110,11 +110,17 @@ User: "基于观察形成研究假设"
 - **一致性**: 使用统一的记录格式
 - **可追溯**: 保留原始数据引用
 
-## Related Skills
+## Related Skills & Tools
 
-- **file-reading**: 读取观察数据
+### Related Skills
+- **literature-review**: 文献支撑观察发现
 - **theory-building**: 基于观察构建理论
 - **quality-gate**: 验证观察质量
+
+### Related Tools
+- **file-reading**: 读取观察数据（建设中）
+- **paddleocr-async**: OCR处理大文件
+- **document-output**: 输出观察报告（建设中）
 
 ## References
 

@@ -1,0 +1,32 @@
+{
+  "owner": "bobholamovic",
+  "slug": "paddleocr-doc-parsing",
+  "displayName": "PaddleOCR Document Parsing",
+  "latest": {
+    "version": "2.0.4",
+    "publishedAt": 1773239649334,
+    "commit": "https://github.com/openclaw/skills/commit/9261fe3f826a2a47419c24e9a42ca36053ba3be3"
+  },
+  "history": [
+    {
+      "version": "1.0.3",
+      "publishedAt": 1772592287678,
+      "commit": "https://github.com/openclaw/skills/commit/8ee36e1b8371d26fe6c679d8eaad12bb4e757426"
+    },
+    {
+      "version": "1.0.2",
+      "publishedAt": 1770710439427,
+      "commit": "https://github.com/openclaw/skills/commit/f074b44b4169d1c571027661bb881596c4526b35"
+    },
+    {
+      "version": "1.0.1",
+      "publishedAt": 1770643776477,
+      "commit": "https://github.com/openclaw/skills/commit/f85212eeaceb817bdc067a2c830fbd9c9fea38de"
+    },
+    {
+      "version": "1.0.0",
+      "publishedAt": 1770273970261,
+      "commit": "https://github.com/clawdbot/skills/commit/6ca4f768b578fb3312318494ed807bbb2adaf505"
+    }
+  ]
+}
