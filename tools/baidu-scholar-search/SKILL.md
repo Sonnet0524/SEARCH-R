@@ -2,7 +2,7 @@
 name: baidu-scholar-search-skill
 description: Baidu Scholar Search - Search Chinese and English academic literature (journals, conferences, papers, etc.)
 homepage: https://xueshu.baidu.com/
-metadata: { "openclaw": { "emoji": "🔬", "requires": { "bins": ["curl"] ,"env":["BAIDU_API_KEY"]},"primaryEnv":"BAIDU_API_KEY" }  }
+metadata: { "openclaw": { "emoji": "🔬", "requires": { "bins": ["python", "curl"] ,"env":["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"]},"primaryEnv":"BAIDU_AISEARCH_TOKEN" }  }
 ---
 
 # Baidu Scholar Search Skill
@@ -14,9 +14,24 @@ Search Chinese and English academic literature by keyword, including journal pap
 
 ### Basic Usage
 ```bash
-bash baidu_scholar_search.sh "keyword"
-bash baidu_scholar_search.sh "keyword" page_number
-bash baidu_scholar_search.sh "keyword" page_number include_abstract
+# Using Python (recommended, cross-platform)
+python tools/baidu-scholar-search/scripts/search.py --keyword "关键词"
+python tools/baidu-scholar-search/scripts/search.py --keyword "关键词" --page 0
+python tools/baidu-scholar-search/scripts/search.py --keyword "关键词" --page 0 --abstract
+
+# Using Shell wrapper (Linux/macOS)
+bash tools/baidu-scholar-search/scripts/search.sh "keyword"
+bash tools/baidu-scholar-search/scripts/search.sh "keyword" page_number
+bash tools/baidu-scholar-search/scripts/search.sh "keyword" page_number include_abstract
+```
+
+### Setup
+
+```bash
+# Set environment variable (one of the following)
+export BAIDU_API_KEY="your_api_key"
+# or
+export BAIDU_AISEARCH_TOKEN="your_api_key"
 ```
 
 ### Parameter Description

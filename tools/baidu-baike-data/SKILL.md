@@ -2,7 +2,7 @@
 name: baidu-baike-data
 description: The Baidu Baike Component is a knowledge service tool designed to query authoritative encyclopedia explanations for various nouns. Its core function is given a specific "noun" (object, person, location, concept, event, etc.) provided by the user, it returns a standardized, detailed entry explanation sourced from Baidu Baike.
 homepage: https://baike.baidu.com/
-metadata: { "openclaw": { "emoji": "📖", "requires": { "bins": ["python3"] ,"env":["BAIDU_API_KEY"]},"primaryEnv":"BAIDU_API_KEY" } }
+metadata: { "openclaw": { "emoji": "📖", "requires": { "bins": ["python"] ,"env":["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"]},"primaryEnv":"BAIDU_AISEARCH_TOKEN" } }
 ---
 
 # Baidu Baike
@@ -14,17 +14,26 @@ Query encyclopedia entries from Baidu Baike.
 ### Scenario 1: Direct Search
 Get default matching entry for a keyword.
 ```bash
-python3 scripts/baidu_baike.py --search_type=lemmaTitle --search_key="keyword"
+python tools/baidu-baike-data/scripts/baike.py --search_type=lemmaTitle --search_key="keyword"
 ```
 
 ### Scenario 2: Homonym Resolution
 When term has multiple entries, list them and select by ID.
 ```bash
 # List entries with same name
-python3 scripts/baidu_baike.py --search_type=lemmaList --search_key="keyword" --top_k=5
+python tools/baidu-baike-data/scripts/baike.py --search_type=lemmaList --search_key="keyword" --top_k=5
 
 # Get specific entry by ID
-python3 scripts/baidu_baike.py --search_type=lemmaId --search_key="entry_id"
+python tools/baidu-baike-data/scripts/baike.py --search_type=lemmaId --search_key="entry_id"
+```
+
+## Setup
+
+```bash
+# Set environment variable (one of the following)
+export BAIDU_API_KEY="your_api_key"
+# or
+export BAIDU_AISEARCH_TOKEN="your_api_key"
 ```
 
 ## API

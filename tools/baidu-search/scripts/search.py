@@ -1,9 +1,14 @@
 import sys
+import io
 import json
 import requests
 import os
 import re
 from datetime import datetime, timedelta
+
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 
 def baidu_search(api_key, requestBody: dict):
@@ -48,6 +53,7 @@ if __name__ == "__main__":
         sys.exit(1)
     count = 10
     search_filter = {}
+    start_date = None
     if "count" in parse_data:
         count = int(parse_data["count"])
         if count <= 0:
@@ -61,13 +67,14 @@ if __name__ == "__main__":
         if parse_data["freshness"] in ["pd", "pw", "pm", "py"]:
             if parse_data["freshness"] == "pd":
                 start_date = (current_time - timedelta(days=1)).strftime("%Y-%m-%d")
-            if parse_data["freshness"] == "pw":
+            elif parse_data["freshness"] == "pw":
                 start_date = (current_time - timedelta(days=6)).strftime("%Y-%m-%d")
-            if parse_data["freshness"] == "pm":
+            elif parse_data["freshness"] == "pm":
                 start_date = (current_time - timedelta(days=30)).strftime("%Y-%m-%d")
-            if parse_data["freshness"] == "py":
+            elif parse_data["freshness"] == "py":
                 start_date = (current_time - timedelta(days=364)).strftime("%Y-%m-%d")
-            search_filter = {"range": {"page_time": {"gte": start_date, "lt": end_date}}}
+            if start_date:
+                search_filter = {"range": {"page_time": {"gte": start_date, "lt": end_date}}}
         elif re.match(pattern, parse_data["freshness"]):
             start_date = parse_data["freshness"].split("to")[0]
             end_date = parse_data["freshness"].split("to")[1]
@@ -77,7 +84,7 @@ if __name__ == "__main__":
             sys.exit(1)
 
     # We will pass these via env vars for security
-    api_key = os.getenv("BAIDU_API_KEY")
+    api_key = os.getenv("BAIDU_API_KEY") or os.getenv("BAIDU_AISEARCH_TOKEN")
 
     if not api_key:
         print("Error: BAIDU_API_KEY must be set in environment.")

@@ -6,10 +6,15 @@ Query encyclopedia entries from Baidu Baike.
 
 import os
 import sys
+import io
 import requests
 import json
 import argparse
 from typing import Dict, Any, List
+
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 
 class BaiduBaikeClient:
@@ -83,7 +88,7 @@ def main():
     
     args = parser.parse_args()
     
-    api_key = os.getenv("BAIDU_API_KEY")
+    api_key = os.getenv("BAIDU_API_KEY") or os.getenv("BAIDU_AISEARCH_TOKEN")
     if not api_key:
         print("Error: BAIDU_API_KEY environment variable not set", file=sys.stderr)
         sys.exit(1)
