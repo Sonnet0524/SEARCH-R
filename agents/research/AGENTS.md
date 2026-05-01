@@ -353,7 +353,7 @@ SEARCH-R/
   - [文字识别](tools/paddleocr-text-recognition/SKILL.md) - 图像OCR
   - [异步OCR](tools/paddleocr-async/SKILL.md) - 异步API调用
 - **通用工具**
-  - [文件阅读](tools/file-reading/SKILL.md) - 读取多种格式文件（建设中）
+  - [文件阅读](tools/file-reading/SKILL.md) - 读取Excel(.xlsx/.xls/.et)和Word(.docx)
   - [文档输出](tools/document-output/SKILL.md) - 生成格式化文档（建设中）
 
 ### 模板文档
