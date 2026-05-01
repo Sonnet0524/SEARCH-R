@@ -1,8 +1,8 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "agent": {
-    "research-agent": {
-      "description": "Research Agent - 研究方法论Agent",
+    "research": {
+      "description": "SEARCH-R Research Agent - 使用SEARCH-R方法论进行系统性研究的研究型Agent",
       "mode": "primary",
       "prompt": "{file:./agents/research/AGENTS.md}",
       "skills": [

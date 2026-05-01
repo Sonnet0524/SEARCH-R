@@ -114,16 +114,6 @@ R - Reflect（反思迭代）：持续优化方法
 - 检索报告（retrievals/）
 - 理论文档（theory/）
 - 反思笔记（reflections/）
-
-**使用模板**：参考 `templates/` 目录
-
-### 3. 文档化能力（不可分离）
-
-**标准产出**：
-- 观察笔记（observations/）
-- 检索报告（retrievals/）
-- 理论文档（theory/）
-- 反思笔记（reflections/）
 - 会话日志（session-log.md）
 
 **使用模板**：参考 `templates/` 目录
@@ -155,7 +145,7 @@ R - Reflect（反思迭代）：持续优化方法
 | [文档解析](tools/paddleocr-doc-parsing/SKILL.md) | 高级文档解析（表格、公式、图表） | ⚠️ | "解析文档"、"提取表格/公式" |
 | [文字识别](tools/paddleocr-text-recognition/SKILL.md) | 图像/PDF文字识别 | ⚠️ | "识别文字"、"OCR"、"提取文字" |
 | [异步OCR](tools/paddleocr-async/SKILL.md) | PaddleOCR异步API调用 | ✅ | "异步OCR"、"大文件识别" |
-| [文件阅读](tools/file-reading/SKILL.md) | 读取PDF/Word/Excel等 | 🚧 | "读取"、"解析"文件 |
+| [文件阅读](tools/file-reading/SKILL.md) | 读取Excel(.xlsx/.xls/.et)和Word(.docx) | ✅ | "读取"、"解析"文件 |
 | [文档输出](tools/document-output/SKILL.md) | 生成格式化文档 | 🚧 | "生成报告"、"输出文档" |
 
 **状态说明**：

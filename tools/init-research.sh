@@ -177,32 +177,280 @@ if [ -d "agents/research/examples" ]; then
     cp -r agents/research/examples/* "../$PROJECT_NAME/examples/" 2>/dev/null || true
 fi
 
-# 创建opencode.json配置（如果是OpenCode环境）
-if [ "$ENVIRONMENT" = "opencode" ]; then
-    print_info "创建OpenCode配置..."
-    cat > "../$PROJECT_NAME/opencode.json" << EOF
+# 复制工具集
+print_info "复制工具集..."
+if [ -d "tools" ]; then
+    mkdir -p "../$PROJECT_NAME/tools"
+    cp -r tools/* "../$PROJECT_NAME/tools/"
+    print_success "已复制tools目录（包含所有工具定义和脚本）"
+else
+    print_warning "未找到tools目录，跳过"
+fi
+
+# 创建opencode.json配置（项目入口文件，必须创建）
+print_info "创建opencode.json项目入口配置..."
+cat > "../$PROJECT_NAME/opencode.json" << 'OPENCODE_JSON_EOF'
 {
-  "\$schema": "https://opencode.ai/config.json",
-  "agent": {
-    "research-agent": {
-      "description": "Research Agent - ${PROJECT_DESC:-$PROJECT_TITLE}",
+  "$schema": "https://opencode.dev/schema/v1/opencode.json",
+  "project": {
+    "name": "${PROJECT_NAME}",
+    "displayName": "${PROJECT_TITLE}",
+    "description": "${PROJECT_DESC:-使用SEARCH-R方法论进行系统性研究}",
+    "version": "1.0.0",
+    "methodology": "SEARCH-R Framework v2.0",
+    "createdAt": "$(date +%Y-%m-%d)",
+    "repository": { "type": "git", "url": "./" }
+  },
+  "agents": [
+    {
+      "id": "research",
+      "name": "Research Agent",
+      "description": "使用SEARCH-R方法论进行系统性研究的研究型Agent",
       "mode": "primary",
-      "prompt": "{file:./agents/research/AGENTS.md}",
+      "entryPoint": "agents/research/AGENTS.md",
+      "version": "2.0",
       "skills": [
         "literature-review",
         "observation",
         "quality-gate",
-        "theory-building",
-        "web-search",
-        "file-reading",
-        "document-output"
-      ]
+        "theory-building"
+      ],
+      "defaultSkill": "literature-review",
+      "metadata": {
+        "role": "研究员",
+        "focus": ["为什么", "是什么", "怎么做"],
+        "level": "L0 - 研究方法论框架层"
+      }
     }
+  ],
+  "skills": [
+    {
+      "id": "literature-review",
+      "name": "文献检索",
+      "description": "系统化检索和分析文献。当用户要求'检索文献'、'调研现有研究'、'文献综述'、'了解研究现状'时触发。",
+      "type": "agent",
+      "agentId": "research",
+      "entryPoint": "agents/research/skills/literature-review/SKILL.md",
+      "tags": ["文献检索", "研究", "综述", "知识图谱"],
+      "trigger": "on_demand",
+      "relatedTools": ["baidu-scholar-search", "baidu-search", "baidu-baike-data"]
+    },
+    {
+      "id": "observation",
+      "name": "观察记录",
+      "description": "系统化观察和记录。当用户要求'观察'、'记录现象'、'发现模式'时触发。",
+      "type": "agent",
+      "agentId": "research",
+      "entryPoint": "agents/research/skills/observation/SKILL.md",
+      "tags": ["观察", "记录", "模式发现", "现象分析"],
+      "trigger": "on_demand"
+    },
+    {
+      "id": "quality-gate",
+      "name": "质量门控",
+      "description": "评估研究质量。当需要判断研究结论的确定性、可接受性时触发。",
+      "type": "agent",
+      "agentId": "research",
+      "entryPoint": "agents/research/skills/quality-gate/SKILL.md",
+      "tags": ["质量评估", "研究评审", "确定性评估"],
+      "trigger": "auto"
+    },
+    {
+      "id": "theory-building",
+      "name": "理论构建",
+      "description": "构建和验证理论框架。当用户要求'建立理论'、'构建框架'、'提出模型'时触发。",
+      "type": "agent",
+      "agentId": "research",
+      "entryPoint": "agents/research/skills/theory-building/SKILL.md",
+      "tags": ["理论构建", "框架设计", "模型验证"],
+      "trigger": "on_demand"
+    }
+  ],
+  "tools": [
+    {
+      "id": "baidu-search",
+      "name": "百度搜索",
+      "description": "百度AI搜索引擎（BDSE）。用于实时信息、文档或研究主题的搜索。",
+      "category": "search",
+      "entryPoint": "tools/baidu-search/SKILL.md",
+      "script": "tools/baidu-search/scripts/search.py",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"],
+        "primaryEnv": "BAIDU_AISEARCH_TOKEN"
+      },
+      "parameters": {
+        "query": {"type": "string", "required": true},
+        "count": {"type": "integer", "required": false, "default": 10, "range": "1-50"},
+        "freshness": {"type": "string", "required": false}
+      }
+    },
+    {
+      "id": "baidu-scholar-search",
+      "name": "百度学术",
+      "description": "百度学术文献检索。用于学术论文、期刊、会议论文的检索。",
+      "category": "search",
+      "entryPoint": "tools/baidu-scholar-search/SKILL.md",
+      "script": "tools/baidu-scholar-search/scripts/search.py",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"],
+        "primaryEnv": "BAIDU_AISEARCH_TOKEN"
+      },
+      "parameters": {
+        "query": {"type": "string", "required": true},
+        "count": {"type": "integer", "required": false, "default": 10, "range": "1-50"},
+        "freshness": {"type": "string", "required": false}
+      }
+    },
+    {
+      "id": "baidu-baike-data",
+      "name": "百度百科",
+      "description": "百度百科词条查询。用于概念定义、术语解释、知识查询。",
+      "category": "data",
+      "entryPoint": "tools/baidu-baike-data/SKILL.md",
+      "script": "tools/baidu-baike-data/scripts/baike.py",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"],
+        "primaryEnv": "BAIDU_AISEARCH_TOKEN"
+      },
+      "parameters": {
+        "query": {"type": "string", "required": true}
+      }
+    },
+    {
+      "id": "file-reading",
+      "name": "文件阅读",
+      "description": "读取Excel(.xlsx/.xls/.et)和Word(.docx)文件内容。",
+      "category": "io",
+      "entryPoint": "tools/file-reading/SKILL.md",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": []
+      },
+      "note": "依赖 openpyxl, python-docx, xlrd, pywin32，运行 pip install -r tools/file-reading/scripts/requirements.txt 安装"
+    },
+    {
+      "id": "paddleocr-doc-parsing",
+      "name": "文档解析",
+      "description": "高级文档解析（表格、公式、图表）。用于复杂PDF、扫描件的深度解析。",
+      "category": "ocr",
+      "entryPoint": "tools/paddleocr-doc-parsing/SKILL.md",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["PADDLEOCR_OCR_API_URL"]
+      },
+      "note": "需要配置PaddleOCR专属API URL"
+    },
+    {
+      "id": "paddleocr-text-recognition",
+      "name": "文字识别",
+      "description": "图像/PDF文字识别（OCR）。用于提取图片或PDF中的文字内容。",
+      "category": "ocr",
+      "entryPoint": "tools/paddleocr-text-recognition/SKILL.md",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["PADDLEOCR_OCR_API_URL"]
+      },
+      "note": "需要配置PaddleOCR专属API URL"
+    },
+    {
+      "id": "paddleocr-async",
+      "name": "异步OCR",
+      "description": "PaddleOCR异步API调用。用于大文件、批量文档的异步识别处理。",
+      "category": "ocr",
+      "entryPoint": "tools/paddleocr-async/SKILL.md",
+      "script": "tools/paddleocr-async/scripts/paddleocr_async.py",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["PADDLEOCR_OCR_API_URL"]
+      }
+    },
+    {
+      "id": "document-output",
+      "name": "文档输出",
+      "description": "生成格式化文档（报告、论文等）。建设中。",
+      "category": "io",
+      "entryPoint": "tools/document-output/SKILL.md",
+      "status": "wip",
+      "note": "功能受限，建设中"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "search-r-cycle",
+      "name": "SEARCH-R研究循环",
+      "description": "完整的研究方法论循环：Survey -> Explore -> Analyze -> Review -> Confirm -> Harvest -> Reflect",
+      "steps": [
+        {"id": "S", "name": "Survey", "description": "观察调研：从实践中发现问题"},
+        {"id": "E", "name": "Explore", "description": "探索检索：检索相关知识"},
+        {"id": "A", "name": "Analyze", "description": "分析思考：深度理论构建"},
+        {"id": "R1", "name": "Review", "description": "评审探讨：Human参与探讨"},
+        {"id": "C", "name": "Confirm", "description": "确认验证：实践中验证"},
+        {"id": "H", "name": "Harvest", "description": "收获产出：沉淀研究成果"},
+        {"id": "R2", "name": "Reflect", "description": "反思迭代：持续优化方法"}
+      ],
+      "entryPoint": "methodology/search-r-cycle.md"
+    }
+  ],
+  "directories": {
+    "agents": "agents/",
+    "skills": "agents/research/skills/",
+    "tools": "tools/",
+    "methodology": "methodology/",
+    "templates": "templates/",
+    "research": {
+      "observations": "research/observations/",
+      "retrievals": "research/retrievals/",
+      "theory": "research/theory/",
+      "reflections": "research/reflections/"
+    },
+    "references": "references/",
+    "examples": "examples/"
+  },
+  "config": {
+    "defaultAgent": "research",
+    "researchDepth": {
+      "target": "Level 0-2",
+      "levels": {
+        "L0": "第一性原理（为什么）",
+        "L1": "设计原则（是什么）",
+        "L2": "实现思路（怎么做）",
+        "L3": "具体实现（细节）"
+      }
+    },
+    "humanInvolvement": {
+      "mode": "最小化参与",
+      "triggers": ["研究方向决策", "理论验证决策", "重大反思决策"]
+    },
+    "documentation": {
+      "required": true,
+      "templates": {
+        "observation": "templates/observation-template.md",
+        "retrieval": "templates/retrieval-survey-template.md",
+        "theory": "templates/theory-template.md",
+        "reflection": "templates/reflection-template.md"
+      }
+    }
+  },
+  "currentTopic": {
+    "id": "${PROJECT_NAME}",
+    "name": "${PROJECT_TITLE}",
+    "status": "active",
+    "entryPoint": "agents/research/research-topics/${PROJECT_NAME}.md",
+    "sessionLog": "agents/research/session-log.md"
   }
 }
-EOF
-    print_success "已创建opencode.json配置"
-fi
+OPENCODE_JSON_EOF
+print_success "已创建opencode.json配置（完整项目入口）"
 
 # 创建.gitignore
 print_info "创建.gitignore..."
@@ -510,7 +758,7 @@ if [ "$ENVIRONMENT" = "opencode" ]; then
     print_info "OpenCode环境:"
     echo "  - 配置文件: opencode.json"
     echo "  - Agent: research-agent"
-    echo "  - 可用技能: literature-review, observation, quality-gate, theory-building, web-search, file-reading, document-output"
+    echo "  - 可用技能: literature-review, observation, quality-gate, theory-building, file-reading, document-output"
 fi
 echo ""
 print_info "查看文档:"

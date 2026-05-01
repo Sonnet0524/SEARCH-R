@@ -1,3 +1,8 @@
+---
+name: paddleocr-async
+description: PaddleOCR异步API调用。当用户要求"异步OCR"、"大文件识别"、"批量文档处理"时触发。支持PP-OCRv5、PaddleOCR-VL-1.5、PP-StructureV3模型。
+---
+
 # PaddleOCR 异步API Skill
 
 ## 概述

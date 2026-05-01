@@ -2,7 +2,7 @@
 
 > 如何使用SEARCH-R方法论创建和管理研究课题
 
-**版本**: v2.0 | **更新**: 2026-03-13
+**版本**: v2.3 | **更新**: 2026-04-27
 
 ---
 
@@ -305,29 +305,271 @@ mkdir -p /Users/sonnet/opencode/agent-memory-research
 #       └── document-output/        # 文档输出
 # - tools/                          # 工具集
 
-# 3. 创建opencode.json配置（如果是OpenCode环境）
-cat > opencode.json << 'EOF'
+# 3. 创建opencode.json配置（完整版）
+# 这是Opencode框架识别项目的入口文件，必须包含完整的Agent、Skill、Tool注册信息
+cat > opencode.json << 'OPENCODE_EOF'
 {
-  "$schema": "https://opencode.ai/config.json",
-  "agent": {
-    "research-agent": {
-      "description": "Research Agent - Agent记忆系统研究",
+  "$schema": "https://opencode.dev/schema/v1/opencode.json",
+  "project": {
+    "name": "${PROJECT_NAME}",
+    "displayName": "${PROJECT_DISPLAY_NAME}",
+    "description": "${PROJECT_DESCRIPTION}",
+    "version": "1.0.0",
+    "methodology": "SEARCH-R Framework v2.0",
+    "createdAt": "$(date +%Y-%m-%d)",
+    "repository": { "type": "git", "url": "./" }
+  },
+  "agents": [
+    {
+      "id": "research",
+      "name": "Research Agent",
+      "description": "使用SEARCH-R方法论进行系统性研究的研究型Agent",
       "mode": "primary",
-      "prompt": "{file:./agents/research/AGENTS.md}",
+      "entryPoint": "agents/research/AGENTS.md",
+      "version": "2.0",
       "skills": [
         "literature-review",
         "observation",
         "quality-gate",
-        "theory-building",
-        "web-search",
-        "file-reading",
-        "document-output"
-      ]
+        "theory-building"
+      ],
+      "defaultSkill": "literature-review",
+      "metadata": {
+        "role": "研究员",
+        "focus": ["为什么", "是什么", "怎么做"],
+        "level": "L0 - 研究方法论框架层"
+      }
     }
+  ],
+  "skills": [
+    {
+      "id": "literature-review",
+      "name": "文献检索",
+      "description": "系统化检索和分析文献。当用户要求'检索文献'、'调研现有研究'、'文献综述'、'了解研究现状'时触发。",
+      "type": "agent",
+      "agentId": "research",
+      "entryPoint": "agents/research/skills/literature-review/SKILL.md",
+      "tags": ["文献检索", "研究", "综述", "知识图谱"],
+      "trigger": "on_demand",
+      "relatedTools": ["baidu-scholar-search", "baidu-search", "baidu-baike-data"]
+    },
+    {
+      "id": "observation",
+      "name": "观察记录",
+      "description": "系统化观察和记录。当用户要求'观察'、'记录现象'、'发现模式'时触发。",
+      "type": "agent",
+      "agentId": "research",
+      "entryPoint": "agents/research/skills/observation/SKILL.md",
+      "tags": ["观察", "记录", "模式发现", "现象分析"],
+      "trigger": "on_demand"
+    },
+    {
+      "id": "quality-gate",
+      "name": "质量门控",
+      "description": "评估研究质量。当需要判断研究结论的确定性、可接受性时触发。",
+      "type": "agent",
+      "agentId": "research",
+      "entryPoint": "agents/research/skills/quality-gate/SKILL.md",
+      "tags": ["质量评估", "研究评审", "确定性评估"],
+      "trigger": "auto"
+    },
+    {
+      "id": "theory-building",
+      "name": "理论构建",
+      "description": "构建和验证理论框架。当用户要求'建立理论'、'构建框架'、'提出模型'时触发。",
+      "type": "agent",
+      "agentId": "research",
+      "entryPoint": "agents/research/skills/theory-building/SKILL.md",
+      "tags": ["理论构建", "框架设计", "模型验证"],
+      "trigger": "on_demand"
+    }
+  ],
+  "tools": [
+    {
+      "id": "baidu-search",
+      "name": "百度搜索",
+      "description": "百度AI搜索引擎（BDSE）。用于实时信息、文档或研究主题的搜索。",
+      "category": "search",
+      "entryPoint": "tools/baidu-search/SKILL.md",
+      "script": "tools/baidu-search/scripts/search.py",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"],
+        "primaryEnv": "BAIDU_AISEARCH_TOKEN"
+      },
+      "parameters": {
+        "query": {"type": "string", "required": true},
+        "count": {"type": "integer", "required": false, "default": 10, "range": "1-50"},
+        "freshness": {"type": "string", "required": false}
+      }
+    },
+    {
+      "id": "baidu-scholar-search",
+      "name": "百度学术",
+      "description": "百度学术文献检索。用于学术论文、期刊、会议论文的检索。",
+      "category": "search",
+      "entryPoint": "tools/baidu-scholar-search/SKILL.md",
+      "script": "tools/baidu-scholar-search/scripts/search.py",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"],
+        "primaryEnv": "BAIDU_AISEARCH_TOKEN"
+      },
+      "parameters": {
+        "query": {"type": "string", "required": true},
+        "count": {"type": "integer", "required": false, "default": 10, "range": "1-50"},
+        "freshness": {"type": "string", "required": false}
+      }
+    },
+    {
+      "id": "baidu-baike-data",
+      "name": "百度百科",
+      "description": "百度百科词条查询。用于概念定义、术语解释、知识查询。",
+      "category": "data",
+      "entryPoint": "tools/baidu-baike-data/SKILL.md",
+      "script": "tools/baidu-baike-data/scripts/baike.py",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"],
+        "primaryEnv": "BAIDU_AISEARCH_TOKEN"
+      },
+      "parameters": {
+        "query": {"type": "string", "required": true}
+      }
+    },
+    {
+      "id": "paddleocr-doc-parsing",
+      "name": "文档解析",
+      "description": "高级文档解析（表格、公式、图表）。用于复杂PDF、扫描件的深度解析。",
+      "category": "ocr",
+      "entryPoint": "tools/paddleocr-doc-parsing/SKILL.md",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["PADDLEOCR_OCR_API_URL"]
+      },
+      "note": "需要配置PaddleOCR专属API URL"
+    },
+    {
+      "id": "paddleocr-text-recognition",
+      "name": "文字识别",
+      "description": "图像/PDF文字识别（OCR）。用于提取图片或PDF中的文字内容。",
+      "category": "ocr",
+      "entryPoint": "tools/paddleocr-text-recognition/SKILL.md",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["PADDLEOCR_OCR_API_URL"]
+      },
+      "note": "需要配置PaddleOCR专属API URL"
+    },
+    {
+      "id": "paddleocr-async",
+      "name": "异步OCR",
+      "description": "PaddleOCR异步API调用。用于大文件、批量文档的异步识别处理。",
+      "category": "ocr",
+      "entryPoint": "tools/paddleocr-async/SKILL.md",
+      "script": "tools/paddleocr-async/scripts/paddleocr_async.py",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": ["PADDLEOCR_OCR_API_URL"]
+      }
+    },
+    {
+      "id": "file-reading",
+      "name": "文件阅读",
+      "description": "读取Excel(.xlsx/.xls/.et)和Word(.docx)文件内容。",
+      "category": "io",
+      "entryPoint": "tools/file-reading/SKILL.md",
+      "status": "ready",
+      "requires": {
+        "bins": ["python"],
+        "env": []
+      },
+      "note": "依赖 openpyxl, python-docx, xlrd, pywin32，运行 pip install -r tools/file-reading/scripts/requirements.txt 安装"
+    },
+    {
+      "id": "document-output",
+      "name": "文档输出",
+      "description": "生成格式化文档（报告、论文等）。建设中。",
+      "category": "io",
+      "entryPoint": "tools/document-output/SKILL.md",
+      "status": "wip",
+      "note": "功能受限，建设中"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "search-r-cycle",
+      "name": "SEARCH-R研究循环",
+      "description": "完整的研究方法论循环：Survey -> Explore -> Analyze -> Review -> Confirm -> Harvest -> Reflect",
+      "steps": [
+        {"id": "S", "name": "Survey", "description": "观察调研：从实践中发现问题"},
+        {"id": "E", "name": "Explore", "description": "探索检索：检索相关知识"},
+        {"id": "A", "name": "Analyze", "description": "分析思考：深度理论构建"},
+        {"id": "R1", "name": "Review", "description": "评审探讨：Human参与探讨"},
+        {"id": "C", "name": "Confirm", "description": "确认验证：实践中验证"},
+        {"id": "H", "name": "Harvest", "description": "收获产出：沉淀研究成果"},
+        {"id": "R2", "name": "Reflect", "description": "反思迭代：持续优化方法"}
+      ],
+      "entryPoint": "methodology/search-r-cycle.md"
+    }
+  ],
+  "directories": {
+    "agents": "agents/",
+    "skills": "agents/research/skills/",
+    "tools": "tools/",
+    "methodology": "methodology/",
+    "templates": "templates/",
+    "research": {
+      "observations": "research/observations/",
+      "retrievals": "research/retrievals/",
+      "theory": "research/theory/",
+      "reflections": "research/reflections/"
+    },
+    "references": "references/",
+    "examples": "examples/"
+  },
+  "config": {
+    "defaultAgent": "research",
+    "researchDepth": {
+      "target": "Level 0-2",
+      "levels": {
+        "L0": "第一性原理（为什么）",
+        "L1": "设计原则（是什么）",
+        "L2": "实现思路（怎么做）",
+        "L3": "具体实现（细节）"
+      }
+    },
+    "humanInvolvement": {
+      "mode": "最小化参与",
+      "triggers": ["研究方向决策", "理论验证决策", "重大反思决策"]
+    },
+    "documentation": {
+      "required": true,
+      "templates": {
+        "observation": "templates/observation-template.md",
+        "retrieval": "templates/retrieval-survey-template.md",
+        "theory": "templates/theory-template.md",
+        "reflection": "templates/reflection-template.md"
+      }
+    }
+  },
+  "currentTopic": {
+    "id": "${TOPIC_ID}",
+    "name": "${TOPIC_NAME}",
+    "status": "active",
+    "entryPoint": "agents/research/research-topics/${TOPIC_ID}.md",
+    "sessionLog": "agents/research/session-log.md"
   }
 }
-EOF
-# 注意：非OpenCode环境不会创建此文件
+OPENCODE_EOF
+# 说明：此文件为Opencode框架的项目入口文件，包含完整的Agent、Skill、Tool注册表
+# 所有路径均相对于项目根目录，确保框架能正确加载所有组件
 
 # 4. 创建研究课题配置 (使用最小化模板)
 # 详见下一节
@@ -338,11 +580,13 @@ EOF
 
 **重要说明**：
 - **skills目录**：完整复制到 `agents/research/skills/`，包含所有技能文件
-- **opencode.json**：
-  - 自动检测是否为OpenCode环境
-  - 是：创建配置文件，包含Agent定义和可用技能
-  - 否：不创建，避免污染非OpenCode项目
-- **环境检测**：通过检查当前目录是否存在 `opencode.json` 判断
+- **tools目录**：完整复制到 `tools/`，包含所有工具定义和脚本
+- **opencode.json**（必须创建，无论是否OpenCode环境）：
+  - 这是项目的**入口配置文件**，包含完整的Agent、Skill、Tool注册表
+  - 包含 `agents`, `skills`, `tools`, `workflows`, `directories`, `config`, `currentTopic` 七大模块
+  - 所有路径均相对于项目根目录
+  - 框架通过此文件识别和加载项目组件
+- **环境检测**：不再区分是否OpenCode环境，统一创建完整的 `opencode.json`
 
 ---
 
@@ -601,8 +845,8 @@ active → completed (完成课题)
 ✓ 创建项目目录结构
 ✓ 复制SEARCH-R方法论模板
 ✓ 复制完整skills技能库
-✓ 自动检测环境（OpenCode/其他）
-✓ 根据环境创建opencode.json（仅OpenCode）
+✓ 复制完整tools工具集
+✓ 创建完整opencode.json项目入口配置
 ✓ 创建研究课题配置文件
 ✓ 初始化Git仓库（可选）
 ✓ 生成项目README
@@ -614,12 +858,11 @@ active → completed (完成课题)
 脚本启动
   ↓
 检查当前目录是否有opencode.json
-  ├─ 有 → OpenCode环境
-  │       └─ 创建opencode.json配置
-  └─ 无 → 其他环境
-          └─ 跳过opencode.json创建
+  ├─ 有 → 已有项目，提示更新或覆盖
+  └─ 无 → 新项目
+          └─ 创建完整的opencode.json配置
 
-也可通过 -e/--environment 参数手动指定
+注意：无论是否检测到OpenCode环境，都会创建完整的opencode.json
 ```
 
 ---
@@ -661,7 +904,7 @@ SEARCH-R/                     # 模板仓库根目录
 
 ```
 research-project/
-├── opencode.json          # 项目配置（仅OpenCode环境）
+├── opencode.json          # 项目入口配置（必须）
 ├── README.md              # 项目说明
 ├── .gitignore             # Git忽略配置
 ├── methodology/           # 方法论体系
@@ -693,26 +936,24 @@ research-project/
 │   └── reflections/       # 反思笔记
 ├── templates/             # 文档模板
 ├── references/            # 参考资料
-├── tools/                 # 工具集
+├── tools/                 # 工具集（完整复制，含所有工具定义和脚本）
+│   ├── baidu-search/
+│   ├── baidu-scholar-search/
+│   ├── baidu-baike-data/
+│   ├── paddleocr-doc-parsing/
+│   ├── paddleocr-text-recognition/
+│   ├── paddleocr-async/
+│   ├── file-reading/
+│   ├── document-output/
+│   └── init-research.sh
 └── examples/              # 示例文档
 ```
-SEARCH-R/
-├── methodology/           # 方法论体系
-├── templates/             # 文档模板
-├── agents/research/       # Agent设计
-│   ├── AGENTS.md          # Agent核心定义
-│   ├── init.md            # 本文件
-│   ├── skills/            # 技能库
-│   └── research-topics/
-│       └── topic-template.md
-└── tools/                 # 工具集
-```
 
-### 研究项目仓库
+### 研究项目仓库（完整结构）
 
 ```
 research-project/
-├── opencode.json          # 项目配置（仅OpenCode环境）
+├── opencode.json          # 项目入口配置（必须，包含Agent/Skill/Tool注册表）
 ├── README.md              # 项目说明
 ├── .gitignore             # Git忽略配置
 ├── methodology/           # 方法论体系
@@ -775,7 +1016,6 @@ init新项目时必须复制的文件：
 
 | 文件 | 条件 | 说明 |
 |------|------|------|
-| `opencode.json` | OpenCode环境 | Agent配置和技能定义 |
 | `.gitignore` | 初始化Git时 | Git忽略规则 |
 
 ### 复制完整性检查
@@ -793,12 +1033,30 @@ ls -la agents/research/skills/
 # - document-output/
 # - file-reading/
 
-# 检查opencode.json（如果是OpenCode环境）
+# 检查tools目录是否完整
+ls -la tools/
+# 应该看到：
+# - baidu-search/
+# - baidu-scholar-search/
+# - baidu-baike-data/
+# - paddleocr-doc-parsing/
+# - paddleocr-text-recognition/
+# - paddleocr-async/
+# - file-reading/
+# - document-output/
+# - init-research.sh
+
+# 检查opencode.json（必须存在）
 cat opencode.json
-# 应该包含：
-# - agent.research-agent.description
-# - agent.research-agent.prompt (指向AGENTS.md)
-# - agent.research-agent.skills (列出所有技能)
+# 必须包含以下顶级字段：
+# - project (项目元信息)
+# - agents (Agent注册表)
+# - skills (Skill注册表)
+# - tools (Tool注册表)
+# - workflows (工作流定义)
+# - directories (目录结构映射)
+# - config (项目配置)
+# - currentTopic (当前激活课题)
 ```
 
 ### 目录复制映射
@@ -812,9 +1070,68 @@ agents/research/init.md         →    agents/research/init.md
 agents/research/research-topics/→    agents/research/research-topics/
 methodology/                    →    methodology/
 templates/                      →    templates/
-tools/                          →    tools/
-opencode.json (如果存在)        →    opencode.json (自动创建)
+tools/                          →    tools/（完整复制所有工具定义和脚本）
+（自动生成）                    →    opencode.json（完整项目入口配置）
 ```
+
+### opencode.json 字段说明
+
+`opencode.json` 是项目的**入口配置文件**，Opencode 框架通过此文件识别和加载所有组件。
+
+#### 必须包含的顶级字段
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `project` | object | 项目元信息（名称、版本、描述、方法论） |
+| `agents` | array | Agent注册表，定义项目中所有Agent |
+| `skills` | array | Skill注册表，定义所有可用技能 |
+| `tools` | array | Tool注册表，定义所有可用工具 |
+| `workflows` | array | 工作流定义（如SEARCH-R循环） |
+| `directories` | object | 目录结构映射 |
+| `config` | object | 项目配置（深度标准、Human参与规则等） |
+| `currentTopic` | object | 当前激活的课题信息 |
+
+#### 字段详细说明
+
+**project**
+- `name`: 项目英文标识名（用于目录名）
+- `displayName`: 项目中文显示名
+- `description`: 项目描述
+- `version`: 项目版本
+- `methodology`: 使用的方法论（如"SEARCH-R Framework v2.0"）
+- `createdAt`: 创建日期
+
+**agents[].skills**
+- 列出该Agent可用的所有skill id
+- 必须与 `skills` 数组中的 `id` 对应
+
+**skills[].trigger**
+- `on_demand`: 按需触发（用户明确请求时）
+- `auto`: 自动触发（特定条件下自动调用）
+
+**tools[].status**
+- `ready`: 功能正常，可直接使用
+- `wip`: 建设中，功能受限
+- `deprecated`: 已废弃
+
+**tools[].requires**
+- `bins`: 需要的可执行文件
+- `env`: 需要的环境变量
+- `primaryEnv`: 主环境变量名
+
+**config.researchDepth.levels**
+- `L0`: 第一性原理（为什么）
+- `L1`: 设计原则（是什么）
+- `L2`: 实现思路（怎么做）
+- `L3`: 具体实现（细节）
+
+#### 生成注意事项
+
+1. **路径均相对于项目根目录**：确保所有 `entryPoint` 和 `script` 路径正确
+2. **skill id 必须唯一**：在整个项目中不可重复
+3. **agent.skills 必须与 skills.id 对应**：否则框架无法加载
+4. **tools 必须包含完整信息**：包括 requires 和 parameters
+5. **currentTopic 在创建时初始化**：创建新项目后更新为第一个课题
 
 ---
 
@@ -863,6 +1180,7 @@ nano .env
 | paddleocr-text-recognition | ❌ | ❌ | ✅ |
 | paddleocr-doc-parsing | ❌ | ❌ | ✅ |
 | file-reading | ⚠️ | ⚠️ | ✅ |
+| **说明** | 需pip安装依赖 | 同上 | 安装依赖后可用 |
 | document-output | ✅ | ✅ | ✅ |
 
 ### 未配置时的提示
@@ -944,18 +1262,48 @@ cp -r skills/ ../new-project/agents/research/skills/
 "prompt": "{file:./agents/research/AGENTS.md}"
 ```
 
-### 错误3：OpenCode环境未创建配置
+### 错误3：opencode.json 缺失或不完整
 
-**问题**：在OpenCode环境中未创建opencode.json
+**问题**：未创建 opencode.json 或内容不完整
 
-**后果**：Agent无法正常工作
+**后果**：
+- Opencode 框架无法识别项目
+- Agent、Skills、Tools 无法被正确加载
+- 研究项目无法正常工作
 
 **解决**：
 ```bash
-# 手动检测环境并创建
-if [ -f "opencode.json" ]; then
-  # 创建opencode.json
-fi
+# 必须创建完整的 opencode.json，包含以下顶级字段：
+# project, agents, skills, tools, workflows, directories, config, currentTopic
+
+# 使用 init-research.sh 脚本会自动生成完整配置
+./tools/init-research.sh my-project
+
+# 或手动复制模板并修改
+# 参考本文档"自动化步骤"中的完整模板
+```
+
+### 错误4：tools 目录未完整复制
+
+**问题**：创建项目时未复制 tools/ 目录或复制不完整
+
+**后果**：
+- opencode.json 中注册的 tools 找不到对应的 SKILL.md 或脚本
+- 工具调用失败
+
+**解决**：
+```bash
+# 确保完整复制 tools/ 目录
+# 应该包含：
+# - baidu-search/
+# - baidu-scholar-search/
+# - baidu-baike-data/
+# - paddleocr-doc-parsing/
+# - paddleocr-text-recognition/
+# - paddleocr-async/
+# - file-reading/
+# - document-output/
+# - init-research.sh
 ```
 
 ### 错误4：在模板仓库创建课题后提交到git
@@ -1145,6 +1493,16 @@ A: 在课题配置的"相关课题"部分，可以引用其他课题的成果。
 
 ## 📝 版本历史
 
+- **v2.3** (2026-04-27) - 完善opencode.json生成规范
+  - 强制创建完整的opencode.json（不再区分环境）
+  - 添加完整的Agent/Skill/Tool注册表结构
+  - 添加workflows、directories、config、currentTopic字段
+  - 更新tools目录为完整复制（含所有工具定义和脚本）
+  - 添加opencode.json字段详细说明文档
+  - 更新完整性检查清单，验证opencode.json必填字段
+  - 更新常见错误：添加tools未复制、opencode.json不完整等
+  - 更新init-research.sh功能说明和环境检测逻辑
+
 - **v2.2** (2026-03-13) - 添加创建方式询问
   - 引导时询问新建仓库或在模板仓库创建
   - 明确说明不在模板仓库创建的原因
@@ -1175,5 +1533,5 @@ A: 在课题配置的"相关课题"部分，可以引用其他课题的成果。
 ---
 
 **维护者**: SEARCH-R Framework  
-**更新时间**: 2026-03-13  
+**更新时间**: 2026-04-27  
 **文档类型**: 初始化指南
