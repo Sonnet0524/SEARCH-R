@@ -16,7 +16,7 @@ SEARCH-R仓库是方法论框架模板，为各研究课题提供：
 - 方法论定义（methodology/）
 - 文档模板（templates/）
 - Agent设计规范（agents/research/AGENTS.md）
-- 技能库（agents/research/skills/）
+- 技能库（skills/）
 
 **具体研究课题应该在独立的研究仓库中进行**，例如：
 
