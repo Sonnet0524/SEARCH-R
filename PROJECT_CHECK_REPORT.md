@@ -91,8 +91,9 @@
 
 | 检查项 | 状态 | 说明 |
 |--------|:----:|------|
-| Skills列表 | ✅ | 只包含4个业务能力 |
-| 配置正确 | ✅ | prompt路径正确 |
+| Schema | ✅ | 使用 `https://opencode.ai/config.json` |
+| 格式 | ✅ | 标准格式：`default_agent` + `agent` 对象 |
+| 配置正确 | ✅ | prompt路径正确，引用AGENTS.md |
 
 ### skills/README.md
 

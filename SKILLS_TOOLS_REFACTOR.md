@@ -201,20 +201,21 @@ tools/   →  新项目/tools/          # 完整复制
 
 ```json
 {
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "research",
   "agent": {
-    "research-agent": {
-      "skills": [
-        "literature-review",
-        "observation",
-        "quality-gate",
-        "theory-building"
-      ]
+    "research": {
+      "description": "SEARCH-R Research Agent",
+      "prompt": "{file:./agents/research/AGENTS.md}"
     }
   }
 }
 ```
 
-**注意**：opencode.json只配置Skills，不配置Tools。
+**注意**：
+- opencode.json使用OpenCode标准schema，只配置Agent入口
+- Skills在AGENTS.md中定义，Tools在各自SKILL.md中定义
+- 详细配置参见[init.md](agents/research/init.md)
 
 ---
 

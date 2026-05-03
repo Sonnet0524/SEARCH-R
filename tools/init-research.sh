@@ -44,6 +44,8 @@ SEARCH-R Research Project Initializer
     -d, --description  项目描述
     -g, --git          初始化Git仓库（默认：是）
     -e, --environment  使用环境 (opencode|other)，默认自动检测
+                       opencode: 兼容OpenCode标准，生成.opencode/目录
+                       other: 通用配置，不生成opencode.json（可手动确认）
     -h, --help         显示此帮助信息
 
 示例:
@@ -104,14 +106,40 @@ if [ -z "$PROJECT_NAME" ]; then
     exit 1
 fi
 
-# 自动检测环境
+# 环境选择
 if [ -z "$ENVIRONMENT" ]; then
-    if [ -f "opencode.json" ]; then
-        ENVIRONMENT="opencode"
-        print_info "检测到OpenCode环境"
+    if [ -t 0 ]; then
+        # 交互式终端，询问用户
+        echo ""
+        print_info "请选择使用环境:"
+        echo "  1) opencode - 兼容OpenCode标准（默认）"
+        echo "     - 生成标准 opencode.json"
+        echo "     - 复制 skills 到 .opencode/skills/"
+        echo "     - 复制 tools 到 .opencode/tools/"
+        echo "  2) other   - 通用配置"
+        echo "     - 不生成 opencode.json（可手动确认）"
+        echo "     - 仅保留 agents/research/skills/ 和 tools/ 目录"
+        echo ""
+        read -p "选择 [1/2] (默认: 1): " user_choice
+        case "$user_choice" in
+            2|"other")
+                ENVIRONMENT="other"
+                print_info "使用环境: other（通用配置）"
+                ;;
+            *)
+                ENVIRONMENT="opencode"
+                print_info "使用环境: opencode（OpenCode标准）"
+                ;;
+        esac
     else
-        ENVIRONMENT="other"
-        print_info "未检测到OpenCode环境，使用通用配置"
+        # 非交互式，自动检测
+        if [ -f "opencode.json" ]; then
+            ENVIRONMENT="opencode"
+            print_info "检测到OpenCode环境"
+        else
+            ENVIRONMENT="other"
+            print_info "未检测到OpenCode环境，使用通用配置"
+        fi
     fi
 fi
 
@@ -152,7 +180,7 @@ mkdir -p "../$PROJECT_NAME/agents/research/research-topics"
 cp agents/research/research-topics/topic-template.md "../$PROJECT_NAME/agents/research/research-topics/"
 cp agents/research/research-topics/README.md "../$PROJECT_NAME/agents/research/research-topics/"
 
-# 复制技能库
+# 复制技能库到 agents/research/skills/（所有环境通用）
 print_info "复制技能库..."
 mkdir -p "../$PROJECT_NAME/agents/research/skills"
 if [ -d "skills" ]; then
@@ -170,6 +198,19 @@ else
     fi
 fi
 
+# opencode 环境：额外复制到 .opencode/skills/
+if [ "$ENVIRONMENT" = "opencode" ]; then
+    print_info "复制技能库到OpenCode标准路径..."
+    mkdir -p "../$PROJECT_NAME/.opencode/skills"
+    if [ -d "skills" ]; then
+        cp -r skills/* "../$PROJECT_NAME/.opencode/skills/"
+        print_success "已复制skills到 .opencode/skills/（OpenCode标准路径）"
+    elif [ -d "agents/research/skills" ]; then
+        cp -r agents/research/skills/* "../$PROJECT_NAME/.opencode/skills/"
+        print_success "已复制skills到 .opencode/skills/（OpenCode标准路径）"
+    fi
+fi
+
 # 复制示例
 print_info "复制示例..."
 mkdir -p "../$PROJECT_NAME/examples"
@@ -177,7 +218,7 @@ if [ -d "agents/research/examples" ]; then
     cp -r agents/research/examples/* "../$PROJECT_NAME/examples/" 2>/dev/null || true
 fi
 
-# 复制工具集
+# 复制工具集到 tools/（所有环境通用）
 print_info "复制工具集..."
 if [ -d "tools" ]; then
     mkdir -p "../$PROJECT_NAME/tools"
@@ -187,270 +228,59 @@ else
     print_warning "未找到tools目录，跳过"
 fi
 
-# 创建opencode.json配置（项目入口文件，必须创建）
-print_info "创建opencode.json项目入口配置..."
-cat > "../$PROJECT_NAME/opencode.json" << 'OPENCODE_JSON_EOF'
+# opencode 环境：额外复制到 .opencode/tools/
+if [ "$ENVIRONMENT" = "opencode" ]; then
+    print_info "复制工具集到OpenCode标准路径..."
+    if [ -d "tools" ]; then
+        mkdir -p "../$PROJECT_NAME/.opencode/tools"
+        cp -r tools/* "../$PROJECT_NAME/.opencode/tools/"
+        print_success "已复制tools到 .opencode/tools/（OpenCode标准路径）"
+    fi
+fi
+
+# 创建opencode.json配置（条件生成）
+if [ "$ENVIRONMENT" = "opencode" ]; then
+    print_info "创建opencode.json（OpenCode标准格式）..."
+    cat > "../$PROJECT_NAME/opencode.json" << 'OPENCODE_JSON_EOF'
 {
-  "$schema": "https://opencode.dev/schema/v1/opencode.json",
-  "project": {
-    "name": "${PROJECT_NAME}",
-    "displayName": "${PROJECT_TITLE}",
-    "description": "${PROJECT_DESC:-使用SEARCH-R方法论进行系统性研究}",
-    "version": "1.0.0",
-    "methodology": "SEARCH-R Framework v2.0",
-    "createdAt": "$(date +%Y-%m-%d)",
-    "repository": { "type": "git", "url": "./" }
-  },
-  "agents": [
-    {
-      "id": "research",
-      "name": "Research Agent",
-      "description": "使用SEARCH-R方法论进行系统性研究的研究型Agent",
-      "mode": "primary",
-      "entryPoint": "agents/research/AGENTS.md",
-      "version": "2.0",
-      "skills": [
-        "literature-review",
-        "observation",
-        "quality-gate",
-        "theory-building"
-      ],
-      "defaultSkill": "literature-review",
-      "metadata": {
-        "role": "研究员",
-        "focus": ["为什么", "是什么", "怎么做"],
-        "level": "L0 - 研究方法论框架层"
-      }
-    }
-  ],
-  "skills": [
-    {
-      "id": "literature-review",
-      "name": "文献检索",
-      "description": "系统化检索和分析文献。当用户要求'检索文献'、'调研现有研究'、'文献综述'、'了解研究现状'时触发。",
-      "type": "agent",
-      "agentId": "research",
-      "entryPoint": "agents/research/skills/literature-review/SKILL.md",
-      "tags": ["文献检索", "研究", "综述", "知识图谱"],
-      "trigger": "on_demand",
-      "relatedTools": ["baidu-scholar-search", "baidu-search", "baidu-baike-data"]
-    },
-    {
-      "id": "observation",
-      "name": "观察记录",
-      "description": "系统化观察和记录。当用户要求'观察'、'记录现象'、'发现模式'时触发。",
-      "type": "agent",
-      "agentId": "research",
-      "entryPoint": "agents/research/skills/observation/SKILL.md",
-      "tags": ["观察", "记录", "模式发现", "现象分析"],
-      "trigger": "on_demand"
-    },
-    {
-      "id": "quality-gate",
-      "name": "质量门控",
-      "description": "评估研究质量。当需要判断研究结论的确定性、可接受性时触发。",
-      "type": "agent",
-      "agentId": "research",
-      "entryPoint": "agents/research/skills/quality-gate/SKILL.md",
-      "tags": ["质量评估", "研究评审", "确定性评估"],
-      "trigger": "auto"
-    },
-    {
-      "id": "theory-building",
-      "name": "理论构建",
-      "description": "构建和验证理论框架。当用户要求'建立理论'、'构建框架'、'提出模型'时触发。",
-      "type": "agent",
-      "agentId": "research",
-      "entryPoint": "agents/research/skills/theory-building/SKILL.md",
-      "tags": ["理论构建", "框架设计", "模型验证"],
-      "trigger": "on_demand"
-    }
-  ],
-  "tools": [
-    {
-      "id": "baidu-search",
-      "name": "百度搜索",
-      "description": "百度AI搜索引擎（BDSE）。用于实时信息、文档或研究主题的搜索。",
-      "category": "search",
-      "entryPoint": "tools/baidu-search/SKILL.md",
-      "script": "tools/baidu-search/scripts/search.py",
-      "status": "ready",
-      "requires": {
-        "bins": ["python"],
-        "env": ["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"],
-        "primaryEnv": "BAIDU_AISEARCH_TOKEN"
-      },
-      "parameters": {
-        "query": {"type": "string", "required": true},
-        "count": {"type": "integer", "required": false, "default": 10, "range": "1-50"},
-        "freshness": {"type": "string", "required": false}
-      }
-    },
-    {
-      "id": "baidu-scholar-search",
-      "name": "百度学术",
-      "description": "百度学术文献检索。用于学术论文、期刊、会议论文的检索。",
-      "category": "search",
-      "entryPoint": "tools/baidu-scholar-search/SKILL.md",
-      "script": "tools/baidu-scholar-search/scripts/search.py",
-      "status": "ready",
-      "requires": {
-        "bins": ["python"],
-        "env": ["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"],
-        "primaryEnv": "BAIDU_AISEARCH_TOKEN"
-      },
-      "parameters": {
-        "query": {"type": "string", "required": true},
-        "count": {"type": "integer", "required": false, "default": 10, "range": "1-50"},
-        "freshness": {"type": "string", "required": false}
-      }
-    },
-    {
-      "id": "baidu-baike-data",
-      "name": "百度百科",
-      "description": "百度百科词条查询。用于概念定义、术语解释、知识查询。",
-      "category": "data",
-      "entryPoint": "tools/baidu-baike-data/SKILL.md",
-      "script": "tools/baidu-baike-data/scripts/baike.py",
-      "status": "ready",
-      "requires": {
-        "bins": ["python"],
-        "env": ["BAIDU_API_KEY", "BAIDU_AISEARCH_TOKEN"],
-        "primaryEnv": "BAIDU_AISEARCH_TOKEN"
-      },
-      "parameters": {
-        "query": {"type": "string", "required": true}
-      }
-    },
-    {
-      "id": "file-reading",
-      "name": "文件阅读",
-      "description": "读取Excel(.xlsx/.xls/.et)和Word(.docx)文件内容。",
-      "category": "io",
-      "entryPoint": "tools/file-reading/SKILL.md",
-      "status": "ready",
-      "requires": {
-        "bins": ["python"],
-        "env": []
-      },
-      "note": "依赖 openpyxl, python-docx, xlrd, pywin32，运行 pip install -r tools/file-reading/scripts/requirements.txt 安装"
-    },
-    {
-      "id": "paddleocr-doc-parsing",
-      "name": "文档解析",
-      "description": "高级文档解析（表格、公式、图表）。用于复杂PDF、扫描件的深度解析。",
-      "category": "ocr",
-      "entryPoint": "tools/paddleocr-doc-parsing/SKILL.md",
-      "status": "ready",
-      "requires": {
-        "bins": ["python"],
-        "env": ["PADDLEOCR_OCR_API_URL"]
-      },
-      "note": "需要配置PaddleOCR专属API URL"
-    },
-    {
-      "id": "paddleocr-text-recognition",
-      "name": "文字识别",
-      "description": "图像/PDF文字识别（OCR）。用于提取图片或PDF中的文字内容。",
-      "category": "ocr",
-      "entryPoint": "tools/paddleocr-text-recognition/SKILL.md",
-      "status": "ready",
-      "requires": {
-        "bins": ["python"],
-        "env": ["PADDLEOCR_OCR_API_URL"]
-      },
-      "note": "需要配置PaddleOCR专属API URL"
-    },
-    {
-      "id": "paddleocr-async",
-      "name": "异步OCR",
-      "description": "PaddleOCR异步API调用。用于大文件、批量文档的异步识别处理。",
-      "category": "ocr",
-      "entryPoint": "tools/paddleocr-async/SKILL.md",
-      "script": "tools/paddleocr-async/scripts/paddleocr_async.py",
-      "status": "ready",
-      "requires": {
-        "bins": ["python"],
-        "env": ["PADDLEOCR_OCR_API_URL"]
-      }
-    },
-    {
-      "id": "document-output",
-      "name": "文档输出",
-      "description": "生成格式化文档（报告、论文等）。建设中。",
-      "category": "io",
-      "entryPoint": "tools/document-output/SKILL.md",
-      "status": "wip",
-      "note": "功能受限，建设中"
-    }
-  ],
-  "workflows": [
-    {
-      "id": "search-r-cycle",
-      "name": "SEARCH-R研究循环",
-      "description": "完整的研究方法论循环：Survey -> Explore -> Analyze -> Review -> Confirm -> Harvest -> Reflect",
-      "steps": [
-        {"id": "S", "name": "Survey", "description": "观察调研：从实践中发现问题"},
-        {"id": "E", "name": "Explore", "description": "探索检索：检索相关知识"},
-        {"id": "A", "name": "Analyze", "description": "分析思考：深度理论构建"},
-        {"id": "R1", "name": "Review", "description": "评审探讨：Human参与探讨"},
-        {"id": "C", "name": "Confirm", "description": "确认验证：实践中验证"},
-        {"id": "H", "name": "Harvest", "description": "收获产出：沉淀研究成果"},
-        {"id": "R2", "name": "Reflect", "description": "反思迭代：持续优化方法"}
-      ],
-      "entryPoint": "methodology/search-r-cycle.md"
-    }
-  ],
-  "directories": {
-    "agents": "agents/",
-    "skills": "agents/research/skills/",
-    "tools": "tools/",
-    "methodology": "methodology/",
-    "templates": "templates/",
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "research",
+  "agent": {
     "research": {
-      "observations": "research/observations/",
-      "retrievals": "research/retrievals/",
-      "theory": "research/theory/",
-      "reflections": "research/reflections/"
-    },
-    "references": "references/",
-    "examples": "examples/"
-  },
-  "config": {
-    "defaultAgent": "research",
-    "researchDepth": {
-      "target": "Level 0-2",
-      "levels": {
-        "L0": "第一性原理（为什么）",
-        "L1": "设计原则（是什么）",
-        "L2": "实现思路（怎么做）",
-        "L3": "具体实现（细节）"
-      }
-    },
-    "humanInvolvement": {
-      "mode": "最小化参与",
-      "triggers": ["研究方向决策", "理论验证决策", "重大反思决策"]
-    },
-    "documentation": {
-      "required": true,
-      "templates": {
-        "observation": "templates/observation-template.md",
-        "retrieval": "templates/retrieval-survey-template.md",
-        "theory": "templates/theory-template.md",
-        "reflection": "templates/reflection-template.md"
-      }
+      "description": "SEARCH-R Research Agent - 使用SEARCH-R方法论进行系统性研究",
+      "prompt": "{file:./agents/research/AGENTS.md}"
     }
-  },
-  "currentTopic": {
-    "id": "${PROJECT_NAME}",
-    "name": "${PROJECT_TITLE}",
-    "status": "active",
-    "entryPoint": "agents/research/research-topics/${PROJECT_NAME}.md",
-    "sessionLog": "agents/research/session-log.md"
   }
 }
 OPENCODE_JSON_EOF
-print_success "已创建opencode.json配置（完整项目入口）"
+    print_success "已创建opencode.json（OpenCode标准格式）"
+else
+    # other 环境：询问是否生成简化版
+    if [ -t 0 ]; then
+        echo ""
+        read -p "是否生成简化版 opencode.json? [y/N] (默认: N): " gen_config
+        if [[ "$gen_config" =~ ^[Yy]$ ]]; then
+            print_info "创建简化版opencode.json..."
+            cat > "../$PROJECT_NAME/opencode.json" << 'OPENCODE_JSON_EOF'
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "research",
+  "agent": {
+    "research": {
+      "description": "SEARCH-R Research Agent",
+      "prompt": "{file:./agents/research/AGENTS.md}"
+    }
+  }
+}
+OPENCODE_JSON_EOF
+            print_success "已创建简化版opencode.json"
+        else
+            print_info "跳过opencode.json生成"
+        fi
+    else
+        print_info "非交互式环境，跳过opencode.json生成"
+    fi
+fi
 
 # 创建.gitignore
 print_info "创建.gitignore..."
