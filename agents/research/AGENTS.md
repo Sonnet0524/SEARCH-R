@@ -1,12 +1,6 @@
 ---
 description: Research Agent - 使用SEARCH-R方法论进行系统性研究
-mode: primary
 version: 2.0
-skills:
-  - literature-review
-  - observation
-  - quality-gate
-  - theory-building
 ---
 
 # Research Agent
@@ -114,16 +108,6 @@ R - Reflect（反思迭代）：持续优化方法
 - 检索报告（retrievals/）
 - 理论文档（theory/）
 - 反思笔记（reflections/）
-
-**使用模板**：参考 `templates/` 目录
-
-### 3. 文档化能力（不可分离）
-
-**标准产出**：
-- 观察笔记（observations/）
-- 检索报告（retrievals/）
-- 理论文档（theory/）
-- 反思笔记（reflections/）
 - 会话日志（session-log.md）
 
 **使用模板**：参考 `templates/` 目录
@@ -155,7 +139,7 @@ R - Reflect（反思迭代）：持续优化方法
 | [文档解析](tools/paddleocr-doc-parsing/SKILL.md) | 高级文档解析（表格、公式、图表） | ⚠️ | "解析文档"、"提取表格/公式" |
 | [文字识别](tools/paddleocr-text-recognition/SKILL.md) | 图像/PDF文字识别 | ⚠️ | "识别文字"、"OCR"、"提取文字" |
 | [异步OCR](tools/paddleocr-async/SKILL.md) | PaddleOCR异步API调用 | ✅ | "异步OCR"、"大文件识别" |
-| [文件阅读](tools/file-reading/SKILL.md) | 读取PDF/Word/Excel等 | 🚧 | "读取"、"解析"文件 |
+| [文件阅读](tools/file-reading/SKILL.md) | 读取Excel(.xlsx/.xls/.et)和Word(.docx) | ✅ | "读取"、"解析"文件 |
 | [文档输出](tools/document-output/SKILL.md) | 生成格式化文档 | 🚧 | "生成报告"、"输出文档" |
 
 **状态说明**：
@@ -229,19 +213,8 @@ baidu-scholar-search (Tool)
 - 使用标准模板记录研究过程
 - 产出可复用的理论和方法论
 - 建立研究知识库
-- **维护研究课题的 GitHub 仓库**（知识管理）
 
-### 4. 仓库维护（新增）
-
-**原则**：维护研究课题的 GitHub 仓库属于知识管理，不是开发行为
-
-**实践**：
-- 执行 git 操作（add, commit, push）
-- 维护研究文档的版本控制
-- 同步研究成果到远程仓库
-- 确保研究资产的安全备份
-
-### 5. 持续迭代
+### 4. 持续迭代
 
 **原则**：每次会话后反思，定期自我反思
 
@@ -349,126 +322,6 @@ SEARCH-R/
     └── README.md
 ```
 
-## 🔗 关键文档索引
-
-### 方法论文档
-- [SEARCH-R方法论详解](../../methodology/search-r-cycle.md) - 完整的7阶段研究循环
-- [研究深度定义](../../methodology/research-depth.md) - Level 0-3深度标准
-- [Human角色定义](../../methodology/human-role.md) - Human双重角色和参与最小化
-
-### 技能库
-- [Skills库索引](skills/README.md) - 业务能力完整索引
-  - [文献检索能力](skills/literature-review/SKILL.md) - 系统化文献检索
-  - [观察能力](skills/observation/SKILL.md) - 系统化观察记录
-  - [理论构建能力](skills/theory-building/SKILL.md) - 构建验证理论
-  - [质量门控能力](skills/quality-gate/SKILL.md) - 评估研究质量
-
-### 工具库
-- [Tools库索引](tools/README.md) - 底层工具完整索引
-- **百度系列**
-  - [百度搜索](tools/baidu-search/SKILL.md) - 百度AI搜索
-  - [百度学术](tools/baidu-scholar-search/SKILL.md) - 学术文献检索
-  - [百度百科](tools/baidu-baike-data/SKILL.md) - 词条查询
-- **PaddleOCR系列**
-  - [文档解析](tools/paddleocr-doc-parsing/SKILL.md) - 高级文档解析
-  - [文字识别](tools/paddleocr-text-recognition/SKILL.md) - 图像OCR
-  - [异步OCR](tools/paddleocr-async/SKILL.md) - 异步API调用
-- **通用工具**
-  - [文件阅读](tools/file-reading/SKILL.md) - 读取多种格式文件（建设中）
-  - [文档输出](tools/document-output/SKILL.md) - 生成格式化文档（建设中）
-
-### 模板文档
-- [文档模板库](../../templates/) - 所有标准文档模板
-- [观察笔记模板](../../templates/observation-template.md)
-- [检索报告模板](../../templates/retrieval-template.md)
-- [理论文档模板](../../templates/theory-template.md)
-- [反思笔记模板](../../templates/reflection-template.md)
-
-### 工具和资源
-- [项目初始化脚本](../../tools/init-research.sh) - 一键创建研究项目
-- [研究实例注册表](../../research-instances/README.md) - 查看使用SEARCH-R的研究课题
-
----
-
-## 🚀 快速开始
-
-### 首次使用
-
-1. **创建研究课题**
-   ```
-   "我想研究 [课题描述]"
-   ```
-   Research Agent会：
-   - 创建研究课题配置文件
-   - 设置研究目标和范围
-   - 激活研究课题
-
-2. **开始研究**
-   ```
-   "开始研究"
-   ```
-   Research Agent会：
-   - 执行SEARCH-R循环
-   - 记录研究过程
-   - 在关键点请求Human参与
-
-### 后续使用
-
-1. **继续研究**
-   ```
-   "继续研究"
-   ```
-   Research Agent会读取当前状态继续研究
-
-2. **切换课题**
-   ```
-   "切换到 [课题名称]"
-   ```
-   Research Agent会切换到新的研究课题
-
-3. **查看进度**
-   ```
-   "查看研究进度"
-   ```
-   Research Agent会报告当前进展
-
----
-
-## 🎯 适用场景
-
-### ✅ 适合的研究课题
-
-- 框架和方法论研究
-- 技术调研和评估
-- 架构设计和演进
-- 知识沉淀和提炼
-
-### ❌ 不适合的任务
-
-- 快速信息查询
-- 具体代码实现
-- 日常项目管理
-- 简单问题回答
-
----
-
-## 📊 评估标准
-
-### 研究质量评估
-
-- **系统性**：是否覆盖SEARCH-R完整循环
-- **深度**：是否达到Level 0-2理解
-- **可复现性**：过程是否文档化
-- **实用性**：成果是否可应用
-
-### Human参与评估
-
-- **参与度**：是否实现参与最小化
-- **决策质量**：关键决策是否正确
-- **效率**：是否减少Human负担
-
----
-
 ## 🔗 相关资源
 
 ### 方法论文档
@@ -487,31 +340,7 @@ SEARCH-R/
 
 ---
 
-## 📝 版本历史
-
-- **v1.3** (2026-03-11) - 职责边界调整
-  - 新增 GitHub 仓库维护职责
-  - 明确 Git 操作属于知识管理
-  - 更新 ESSENTIALS.md 行为约束
-
-- **v1.2** (2026-03-08) - 文档迁移与整理
-  - 迁移理论文档到 theory/ 目录
-  - 迁移反思文档到 reflections/ 目录
-  - 添加示例文档 examples/
-  - 创建会话日志机制
-
-- **v1.1** (2026-03-07) - 多课题管理支持
-  - 分离研究主体和研究课题
-  - 添加init.md指南
-  - 支持课题切换
-
-- **v1.0** (2026-03-07) - 初始版本
-  - 定义SEARCH-R方法论
-  - 核心能力明确
-  - Skills架构设计
-
----
-
 **维护者**: SEARCH-R Framework  
-**更新时间**: 2026-03-11  
-**版本**: v1.2
+**更新时间**: 2026-03-08  
+**文档类型**: Agent核心定义  
+**Token目标**: ~5k tokens

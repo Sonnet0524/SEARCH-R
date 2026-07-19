@@ -2,7 +2,7 @@
 
 > 如何使用SEARCH-R方法论创建和管理研究课题
 
-**版本**: v2.0 | **更新**: 2026-03-13
+**版本**: v2.3 | **更新**: 2026-04-27
 
 ---
 
@@ -305,29 +305,22 @@ mkdir -p /Users/sonnet/opencode/agent-memory-research
 #       └── document-output/        # 文档输出
 # - tools/                          # 工具集
 
-# 3. 创建opencode.json配置（如果是OpenCode环境）
-cat > opencode.json << 'EOF'
+# 3. 创建opencode.json配置（OpenCode标准格式）
+# 这是OpenCode框架识别项目的入口文件，使用标准schema
+cat > opencode.json << 'OPENCODE_EOF'
 {
   "$schema": "https://opencode.ai/config.json",
+  "default_agent": "research",
   "agent": {
-    "research-agent": {
-      "description": "Research Agent - Agent记忆系统研究",
-      "mode": "primary",
-      "prompt": "{file:./agents/research/AGENTS.md}",
-      "skills": [
-        "literature-review",
-        "observation",
-        "quality-gate",
-        "theory-building",
-        "web-search",
-        "file-reading",
-        "document-output"
-      ]
+    "research": {
+      "description": "SEARCH-R Research Agent - 使用SEARCH-R方法论进行系统性研究",
+      "prompt": "{file:./agents/research/AGENTS.md}"
     }
   }
 }
-EOF
-# 注意：非OpenCode环境不会创建此文件
+OPENCODE_EOF
+# 说明：此文件为OpenCode框架的项目入口文件，使用标准schema
+# 所有路径均相对于项目根目录，确保框架能正确加载所有组件
 
 # 4. 创建研究课题配置 (使用最小化模板)
 # 详见下一节
@@ -338,11 +331,15 @@ EOF
 
 **重要说明**：
 - **skills目录**：完整复制到 `agents/research/skills/`，包含所有技能文件
-- **opencode.json**：
-  - 自动检测是否为OpenCode环境
-  - 是：创建配置文件，包含Agent定义和可用技能
-  - 否：不创建，避免污染非OpenCode项目
-- **环境检测**：通过检查当前目录是否存在 `opencode.json` 判断
+- **tools目录**：完整复制到 `tools/`，包含所有工具定义和脚本
+- **opencode.json**（OpenCode环境自动生成，other环境可选）：
+  - 这是项目的**入口配置文件**，使用OpenCode标准schema
+  - 包含 `default_agent` 和 `agent` 定义
+  - Agent通过 `prompt` 引用 AGENTS.md，skills在AGENTS.md中定义
+  - 所有路径均相对于项目根目录
+- **环境检测**：脚本自动检测并询问使用环境（opencode/other）
+  - opencode环境：生成标准opencode.json，额外复制skills/tools到`.opencode/`
+  - other环境：不生成opencode.json（可手动确认），保留标准目录结构
 
 **关键要点**：
 - `description`: 根据研究课题定制描述
@@ -649,8 +646,8 @@ active → completed (完成课题)
 ✓ 创建项目目录结构
 ✓ 复制SEARCH-R方法论模板
 ✓ 复制完整skills技能库
-✓ 自动检测环境（OpenCode/其他）
-✓ 根据环境创建opencode.json（仅OpenCode）
+✓ 复制完整tools工具集
+✓ 创建完整opencode.json项目入口配置
 ✓ 创建研究课题配置文件
 ✓ 初始化Git仓库（可选）
 ✓ 生成项目README
@@ -662,12 +659,11 @@ active → completed (完成课题)
 脚本启动
   ↓
 检查当前目录是否有opencode.json
-  ├─ 有 → OpenCode环境
-  │       └─ 创建opencode.json配置
-  └─ 无 → 其他环境
-          └─ 跳过opencode.json创建
+  ├─ 有 → 已有项目，提示更新或覆盖
+  └─ 无 → 新项目
+          └─ 创建完整的opencode.json配置
 
-也可通过 -e/--environment 参数手动指定
+注意：无论是否检测到OpenCode环境，都会创建完整的opencode.json
 ```
 
 ---
@@ -709,7 +705,7 @@ SEARCH-R/                     # 模板仓库根目录
 
 ```
 research-project/
-├── opencode.json          # 项目配置（仅OpenCode环境）
+├── opencode.json          # 项目入口配置（必须）
 ├── README.md              # 项目说明
 ├── .gitignore             # Git忽略配置
 ├── methodology/           # 方法论体系
@@ -741,26 +737,24 @@ research-project/
 │   └── reflections/       # 反思笔记
 ├── templates/             # 文档模板
 ├── references/            # 参考资料
-├── tools/                 # 工具集
+├── tools/                 # 工具集（完整复制，含所有工具定义和脚本）
+│   ├── baidu-search/
+│   ├── baidu-scholar-search/
+│   ├── baidu-baike-data/
+│   ├── paddleocr-doc-parsing/
+│   ├── paddleocr-text-recognition/
+│   ├── paddleocr-async/
+│   ├── file-reading/
+│   ├── document-output/
+│   └── init-research.sh
 └── examples/              # 示例文档
 ```
-SEARCH-R/
-├── methodology/           # 方法论体系
-├── templates/             # 文档模板
-├── agents/research/       # Agent设计
-│   ├── AGENTS.md          # Agent核心定义
-│   ├── init.md            # 本文件
-│   ├── skills/            # 技能库
-│   └── research-topics/
-│       └── topic-template.md
-└── tools/                 # 工具集
-```
 
-### 研究项目仓库
+### 研究项目仓库（完整结构）
 
 ```
 research-project/
-├── opencode.json          # 项目配置（仅OpenCode环境）
+├── opencode.json          # 项目入口配置（必须，包含Agent/Skill/Tool注册表）
 ├── README.md              # 项目说明
 ├── .gitignore             # Git忽略配置
 ├── methodology/           # 方法论体系
@@ -823,7 +817,6 @@ init新项目时必须复制的文件：
 
 | 文件 | 条件 | 说明 |
 |------|------|------|
-| `opencode.json` | OpenCode环境 | Agent配置和技能定义 |
 | `.gitignore` | 初始化Git时 | Git忽略规则 |
 
 ### 复制完整性检查
@@ -841,12 +834,30 @@ ls -la agents/research/skills/
 # - document-output/
 # - file-reading/
 
-# 检查opencode.json（如果是OpenCode环境）
+# 检查tools目录是否完整
+ls -la tools/
+# 应该看到：
+# - baidu-search/
+# - baidu-scholar-search/
+# - baidu-baike-data/
+# - paddleocr-doc-parsing/
+# - paddleocr-text-recognition/
+# - paddleocr-async/
+# - file-reading/
+# - document-output/
+# - init-research.sh
+
+# 检查opencode.json（必须存在）
 cat opencode.json
-# 应该包含：
-# - agent.research-agent.description
-# - agent.research-agent.prompt (指向AGENTS.md)
-# - agent.research-agent.skills (列出所有技能)
+# 必须包含以下顶级字段：
+# - project (项目元信息)
+# - agents (Agent注册表)
+# - skills (Skill注册表)
+# - tools (Tool注册表)
+# - workflows (工作流定义)
+# - directories (目录结构映射)
+# - config (项目配置)
+# - currentTopic (当前激活课题)
 ```
 
 ### 目录复制映射
@@ -860,9 +871,65 @@ agents/research/init.md         →    agents/research/init.md
 agents/research/research-topics/→    agents/research/research-topics/
 methodology/                    →    methodology/
 templates/                      →    templates/
-tools/                          →    tools/
-opencode.json (如果存在)        →    opencode.json (自动创建)
+tools/                          →    tools/（完整复制所有工具定义和脚本）
+（自动生成）                    →    opencode.json（完整项目入口配置）
 ```
+
+### opencode.json 字段说明
+
+`opencode.json` 是项目的**入口配置文件**，OpenCode 框架通过此文件识别和加载项目。
+
+#### 标准格式（OpenCode schema）
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "research",
+  "agent": {
+    "research": {
+      "description": "SEARCH-R Research Agent",
+      "prompt": "{file:./agents/research/AGENTS.md}"
+    }
+  }
+}
+```
+
+#### 必须包含的顶级字段
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `$schema` | string | 固定为 `https://opencode.ai/config.json` |
+| `default_agent` | string | 默认使用的Agent名称 |
+| `agent` | object | Agent定义对象，键为Agent名称 |
+
+#### Agent 字段
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `description` | string | Agent描述 |
+| `prompt` | string | Agent提示词，可使用 `{file:...}` 引用外部文件 |
+| `model` | string | 可选，指定使用的模型 |
+| `tools` | object | 可选，工具开关配置 |
+
+#### 关于 Skills 和 Tools
+
+- **Skills**：定义在 `agents/research/skills/` 目录下，通过 AGENTS.md 引用
+- **Tools**：定义在 `tools/` 目录下，通过 SKILL.md 描述
+- **OpenCode 标准路径**：opencode环境还会复制到 `.opencode/skills/` 和 `.opencode/tools/`
+
+#### 环境差异
+
+| 环境 | opencode.json | .opencode/目录 |
+|------|--------------|---------------|
+| **opencode** | 自动生成标准格式 | 创建，复制skills/tools |
+| **other** | 可选（询问确认） | 不创建 |
+
+#### 生成注意事项
+
+1. **使用标准schema**：`https://opencode.ai/config.json`
+2. **Agent通过prompt引用AGENTS.md**：skills在AGENTS.md中定义
+3. **路径均相对于项目根目录**
+4. **other环境可选生成**：非OpenCode环境可以跳过opencode.json
 
 ---
 
@@ -911,6 +978,7 @@ nano .env
 | paddleocr-text-recognition | ❌ | ❌ | ✅ |
 | paddleocr-doc-parsing | ❌ | ❌ | ✅ |
 | file-reading | ⚠️ | ⚠️ | ✅ |
+| **说明** | 需pip安装依赖 | 同上 | 安装依赖后可用 |
 | document-output | ✅ | ✅ | ✅ |
 
 ### 未配置时的提示
@@ -992,18 +1060,59 @@ cp -r skills/ ../new-project/agents/research/skills/
 "prompt": "{file:./agents/research/AGENTS.md}"
 ```
 
-### 错误3：OpenCode环境未创建配置
+### 错误3：opencode.json 缺失或不完整
 
-**问题**：在OpenCode环境中未创建opencode.json
+**问题**：未创建 opencode.json 或内容不符合标准格式
 
-**后果**：Agent无法正常工作
+**后果**：
+- OpenCode 框架无法识别项目
+- Agent 无法被正确加载
+- 研究项目无法正常工作
 
 **解决**：
 ```bash
-# 手动检测环境并创建
-if [ -f "opencode.json" ]; then
-  # 创建opencode.json
-fi
+# opencode.json 使用标准格式：
+# - $schema: "https://opencode.ai/config.json"
+# - default_agent: 默认Agent名称
+# - agent: { agent名称: { description, prompt } }
+
+# 使用 init-research.sh 脚本会自动生成标准配置
+./tools/init-research.sh my-project
+
+# 或手动创建
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "research",
+  "agent": {
+    "research": {
+      "description": "...",
+      "prompt": "{file:./agents/research/AGENTS.md}"
+    }
+  }
+}
+```
+
+### 错误4：tools 目录未完整复制
+
+**问题**：创建项目时未复制 tools/ 目录或复制不完整
+
+**后果**：
+- opencode.json 中注册的 tools 找不到对应的 SKILL.md 或脚本
+- 工具调用失败
+
+**解决**：
+```bash
+# 确保完整复制 tools/ 目录
+# 应该包含：
+# - baidu-search/
+# - baidu-scholar-search/
+# - baidu-baike-data/
+# - paddleocr-doc-parsing/
+# - paddleocr-text-recognition/
+# - paddleocr-async/
+# - file-reading/
+# - document-output/
+# - init-research.sh
 ```
 
 ### 错误4：在模板仓库创建课题后提交到git
@@ -1193,6 +1302,18 @@ A: 在课题配置的"相关课题"部分，可以引用其他课题的成果。
 
 ## 📝 版本历史
 
+- **v2.3** (2026-04-27) - opencode.json改为OpenCode标准格式
+  - 使用 `https://opencode.ai/config.json` 标准schema
+  - 简化配置：`default_agent` + `agent` 对象（含description和prompt）
+  - 交互式环境选择：opencode/other（默认opencode）
+  - opencode环境：自动生成标准opencode.json + `.opencode/skills/` + `.opencode/tools/`
+  - other环境：不生成opencode.json（可手动确认），保留标准目录结构
+  - 移除非标准字段：`project`、`agents[]`、`skills[]`、`tools[]`、`workflows[]`、`directories`、`config`、`currentTopic`
+  - Skills/Tools通过AGENTS.md引用，保持原有目录结构不变
+  - 更新init-research.sh：环境询问、条件复制、标准格式生成
+  - 更新所有文档引用（AGENTS.md、init.md、SKILLS_TOOLS_REFACTOR.md等）
+  - 更新常见错误：opencode.json格式、环境选择说明
+
 - **v2.2** (2026-03-13) - 添加创建方式询问
   - 引导时询问新建仓库或在模板仓库创建
   - 明确说明不在模板仓库创建的原因
@@ -1223,5 +1344,5 @@ A: 在课题配置的"相关课题"部分，可以引用其他课题的成果。
 ---
 
 **维护者**: SEARCH-R Framework  
-**更新时间**: 2026-03-13  
+**更新时间**: 2026-04-27  
 **文档类型**: 初始化指南

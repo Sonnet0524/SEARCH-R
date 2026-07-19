@@ -66,7 +66,7 @@ your-project/
 
 ## Step 4: Use Templates
 
-Templates are located in `framework/templates/`. Choose appropriate templates based on your needs:
+Templates are located in `templates/`. Choose appropriate templates based on your needs:
 
 ### Observation Notes
 - Use when: Observing Agent Team practice, document changes, collaboration traces

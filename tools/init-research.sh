@@ -44,6 +44,8 @@ SEARCH-R Research Project Initializer
     -d, --description  项目描述
     -g, --git          初始化Git仓库（默认：是）
     -e, --environment  使用环境 (opencode|other)，默认自动检测
+                       opencode: 兼容OpenCode标准，生成.opencode/目录
+                       other: 通用配置，不生成opencode.json（可手动确认）
     -h, --help         显示此帮助信息
 
 示例:
@@ -104,14 +106,40 @@ if [ -z "$PROJECT_NAME" ]; then
     exit 1
 fi
 
-# 自动检测环境
+# 环境选择
 if [ -z "$ENVIRONMENT" ]; then
-    if [ -f "opencode.json" ]; then
-        ENVIRONMENT="opencode"
-        print_info "检测到OpenCode环境"
+    if [ -t 0 ]; then
+        # 交互式终端，询问用户
+        echo ""
+        print_info "请选择使用环境:"
+        echo "  1) opencode - 兼容OpenCode标准（默认）"
+        echo "     - 生成标准 opencode.json"
+        echo "     - 复制 skills 到 .opencode/skills/"
+        echo "     - 复制 tools 到 .opencode/tools/"
+        echo "  2) other   - 通用配置"
+        echo "     - 不生成 opencode.json（可手动确认）"
+        echo "     - 仅保留 agents/research/skills/ 和 tools/ 目录"
+        echo ""
+        read -p "选择 [1/2] (默认: 1): " user_choice
+        case "$user_choice" in
+            2|"other")
+                ENVIRONMENT="other"
+                print_info "使用环境: other（通用配置）"
+                ;;
+            *)
+                ENVIRONMENT="opencode"
+                print_info "使用环境: opencode（OpenCode标准）"
+                ;;
+        esac
     else
-        ENVIRONMENT="other"
-        print_info "未检测到OpenCode环境，使用通用配置"
+        # 非交互式，自动检测
+        if [ -f "opencode.json" ]; then
+            ENVIRONMENT="opencode"
+            print_info "检测到OpenCode环境"
+        else
+            ENVIRONMENT="other"
+            print_info "未检测到OpenCode环境，使用通用配置"
+        fi
     fi
 fi
 
@@ -152,7 +180,7 @@ mkdir -p "../$PROJECT_NAME/agents/research/research-topics"
 cp agents/research/research-topics/topic-template.md "../$PROJECT_NAME/agents/research/research-topics/"
 cp agents/research/research-topics/README.md "../$PROJECT_NAME/agents/research/research-topics/"
 
-# 复制技能库
+# 复制技能库到 agents/research/skills/（所有环境通用）
 print_info "复制技能库..."
 mkdir -p "../$PROJECT_NAME/agents/research/skills"
 if [ -d "skills" ]; then
@@ -170,6 +198,19 @@ else
     fi
 fi
 
+# opencode 环境：额外复制到 .opencode/skills/
+if [ "$ENVIRONMENT" = "opencode" ]; then
+    print_info "复制技能库到OpenCode标准路径..."
+    mkdir -p "../$PROJECT_NAME/.opencode/skills"
+    if [ -d "skills" ]; then
+        cp -r skills/* "../$PROJECT_NAME/.opencode/skills/"
+        print_success "已复制skills到 .opencode/skills/（OpenCode标准路径）"
+    elif [ -d "agents/research/skills" ]; then
+        cp -r agents/research/skills/* "../$PROJECT_NAME/.opencode/skills/"
+        print_success "已复制skills到 .opencode/skills/（OpenCode标准路径）"
+    fi
+fi
+
 # 复制示例
 print_info "复制示例..."
 mkdir -p "../$PROJECT_NAME/examples"
@@ -177,31 +218,68 @@ if [ -d "agents/research/examples" ]; then
     cp -r agents/research/examples/* "../$PROJECT_NAME/examples/" 2>/dev/null || true
 fi
 
-# 创建opencode.json配置（如果是OpenCode环境）
+# 复制工具集到 tools/（所有环境通用）
+print_info "复制工具集..."
+if [ -d "tools" ]; then
+    mkdir -p "../$PROJECT_NAME/tools"
+    cp -r tools/* "../$PROJECT_NAME/tools/"
+    print_success "已复制tools目录（包含所有工具定义和脚本）"
+else
+    print_warning "未找到tools目录，跳过"
+fi
+
+# opencode 环境：额外复制到 .opencode/tools/
 if [ "$ENVIRONMENT" = "opencode" ]; then
-    print_info "创建OpenCode配置..."
-    cat > "../$PROJECT_NAME/opencode.json" << EOF
+    print_info "复制工具集到OpenCode标准路径..."
+    if [ -d "tools" ]; then
+        mkdir -p "../$PROJECT_NAME/.opencode/tools"
+        cp -r tools/* "../$PROJECT_NAME/.opencode/tools/"
+        print_success "已复制tools到 .opencode/tools/（OpenCode标准路径）"
+    fi
+fi
+
+# 创建opencode.json配置（条件生成）
+if [ "$ENVIRONMENT" = "opencode" ]; then
+    print_info "创建opencode.json（OpenCode标准格式）..."
+    cat > "../$PROJECT_NAME/opencode.json" << 'OPENCODE_JSON_EOF'
 {
-  "\$schema": "https://opencode.ai/config.json",
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "research",
   "agent": {
-    "research-agent": {
-      "description": "Research Agent - ${PROJECT_DESC:-$PROJECT_TITLE}",
-      "mode": "primary",
-      "prompt": "{file:./agents/research/AGENTS.md}",
-      "skills": [
-        "literature-review",
-        "observation",
-        "quality-gate",
-        "theory-building",
-        "web-search",
-        "file-reading",
-        "document-output"
-      ]
+    "research": {
+      "description": "SEARCH-R Research Agent - 使用SEARCH-R方法论进行系统性研究",
+      "prompt": "{file:./agents/research/AGENTS.md}"
     }
   }
 }
-EOF
-    print_success "已创建opencode.json配置"
+OPENCODE_JSON_EOF
+    print_success "已创建opencode.json（OpenCode标准格式）"
+else
+    # other 环境：询问是否生成简化版
+    if [ -t 0 ]; then
+        echo ""
+        read -p "是否生成简化版 opencode.json? [y/N] (默认: N): " gen_config
+        if [[ "$gen_config" =~ ^[Yy]$ ]]; then
+            print_info "创建简化版opencode.json..."
+            cat > "../$PROJECT_NAME/opencode.json" << 'OPENCODE_JSON_EOF'
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "research",
+  "agent": {
+    "research": {
+      "description": "SEARCH-R Research Agent",
+      "prompt": "{file:./agents/research/AGENTS.md}"
+    }
+  }
+}
+OPENCODE_JSON_EOF
+            print_success "已创建简化版opencode.json"
+        else
+            print_info "跳过opencode.json生成"
+        fi
+    else
+        print_info "非交互式环境，跳过opencode.json生成"
+    fi
 fi
 
 # 创建.gitignore
@@ -510,7 +588,7 @@ if [ "$ENVIRONMENT" = "opencode" ]; then
     print_info "OpenCode环境:"
     echo "  - 配置文件: opencode.json"
     echo "  - Agent: research-agent"
-    echo "  - 可用技能: literature-review, observation, quality-gate, theory-building, web-search, file-reading, document-output"
+    echo "  - 可用技能: literature-review, observation, quality-gate, theory-building, file-reading, document-output"
 fi
 echo ""
 print_info "查看文档:"

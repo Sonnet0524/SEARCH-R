@@ -1,123 +1,206 @@
 ---
 name: file-reading
-description: 读取和解析各类文件内容。当用户要求"读取"、"解析"、"查看"PDF、Word、Excel、Markdown等文件时触发。
+description: 读取和解析Excel、Word等文件内容。当用户要求"读取"、"解析"、"查看"Excel(.xlsx/.xls/.et)或Word(.docx)文件时触发。
 trigger: on_demand
-tags: 文件处理, PDF, Word, Excel, 解析
-status: draft
-implementation: pending
+tags: 文件处理, Excel, Word, 解析
+status: ready
 ---
 
-# File Reading Skill
+# File Reading Tool
 
-> **状态**: 🚧 设计中 - 脚本待实现
+读取和解析 Excel、Word 文件，提取结构化内容。
 
-读取和解析各类文件，提取结构化内容。
+## 支持的格式
 
-## Execution Flow
+| 格式 | 扩展名 | 说明 |
+|------|--------|------|
+| Excel 2007+ | .xlsx, .xlsm | 单元格数据、公式 |
+| Excel 97-2003 | .xls | 单元格数据 |
+| WPS 表格 | .et | 单元格数据 |
+| Word | .docx | 文本、表格、样式 |
 
-1. 识别文件类型（扩展名）
-2. 选择对应的解析器
-3. 提取文本和结构信息
-4. 返回格式化内容
+## 依赖安装
 
-## Supported Formats
+```bash
+pip install -r tools/file-reading/scripts/requirements.txt
+```
 
-| 格式 | 扩展名 | 支持内容 |
-|------|--------|---------|
-| PDF | .pdf | 文本、表格、图片描述 |
-| Word | .docx, .doc | 文本、表格、样式 |
-| Excel | .xlsx, .xls, .et | 单元格数据、公式 |
-| Markdown | .md | 文本、代码块、表格 |
-| Text | .txt, .csv | 纯文本内容 |
+依赖包：
+- `openpyxl>=3.1.0` - 读取 .xlsx/.xlsm
+- `python-docx>=0.8.11` - 读取 .docx
+- `xlrd>=2.0.0` - 读取 .xls
+- `pywin32>=300` - 读取 .et (仅 Windows)
 
-## Tool Call
+## 使用方法
 
-> ⚠️ **待实现**: 以下接口为设计规范，脚本尚未编写
+### 方式一：直接导入模块
 
 ```python
-# TODO: 待实现 scripts/reader.py
-from skills.file_reading.scripts.reader import read_file
+import sys
+sys.path.insert(0, 'tools/file-reading/scripts')
 
-# 读取文件
-result = read_file(
-    path="/path/to/file.pdf",
-    options={"extract_tables": True}
-)
+from read_excel import read_excel, read_excel_as_markdown
+from read_docx import read_docx, read_docx_as_markdown
 
-# 处理结果
-if result["success"]:
-    print(f"格式: {result['format']}")
-    print(f"内容: {result['content'][:500]}...")
+# 读取 Excel
+result = read_excel('data.xlsx')
+print(result['file_info'])
+print(result['sheets'][0]['data'])
+
+# 读取为 Markdown
+md = read_excel_as_markdown('data.xlsx')
+print(md)
+
+# 读取 Word
+doc = read_docx('document.docx')
+print(doc['title'])
+print(doc['content'])
 ```
 
-## Output Structure
+### 方式二：作为包导入
 
-### 成功输出
-```json
+```python
+import sys
+sys.path.insert(0, 'tools/file-reading/scripts')
+
+from scripts import read_excel, read_excel_as_markdown
+from scripts import read_docx, read_docx_as_markdown
+```
+
+## 返回数据结构
+
+### Excel 返回结构
+
+```python
 {
-  "success": true,
-  "format": "pdf",
-  "path": "/path/to/file.pdf",
-  "content": "文件内容...",
-  "metadata": {
-    "pages": 10,
-    "author": "作者",
-    "created": "2026-03-10"
-  },
-  "tables": [...]  // 如果提取表格
+    "file_info": {
+        "file_path": "文件路径",
+        "total_sheets": 工作表总数,
+        "read_sheets": 实际读取数量,
+        "format": ".xlsx"
+    },
+    "sheets": [
+        {
+            "name": "工作表名称",
+            "rows": 行数,
+            "columns": 列数,
+            "data": [[单元格数据...], ...]
+        }
+    ]
 }
 ```
 
-### 错误输出
-```json
+### Word 返回结构
+
+```python
 {
-  "success": false,
-  "error": "文件不存在或格式不支持"
+    "file_info": {
+        "file_path": "文件路径",
+        "paragraphs_count": 段落数,
+        "tables_count": 表格数
+    },
+    "title": "文档标题",
+    "content": [
+        {"type": "heading", "level": 1, "text": "标题文本"},
+        {"type": "paragraph", "text": "段落文本"},
+        {"type": "list", "text": "列表项"}
+    ],
+    "tables": [
+        {"rows": 3, "columns": 2, "data": [[...], [...]]}
+    ]
 }
 ```
 
-## Usage Patterns
+## 使用模式
 
-### Pattern 1: PDF阅读
-```
-User: "读取这个PDF文件的内容"
+### 模式 1：读取 Excel 数据文件
 
-→ read_file(path="report.pdf", options={"extract_tables": True})
-→ 返回文本内容和表格数据
-```
+```python
+from read_excel import read_excel
 
-### Pattern 2: Excel数据分析
-```
-User: "查看这个Excel文件的结构"
+# 读取研究数据
+data = read_excel('research_data.xlsx')
 
-→ read_file(path="data.xlsx")
-→ 返回工作表名称、行列数、数据预览
-```
+# 获取第一个工作表
+sheet = data['sheets'][0]
+print(f"工作表: {sheet['name']}, 行数: {sheet['rows']}")
 
-### Pattern 3: Word文档提取
-```
-User: "提取这个Word文档的文本"
+# 获取表头
+headers = sheet['data'][0]
+print(f"列名: {headers}")
 
-→ read_file(path="document.docx")
-→ 返回纯文本内容
+# 获取数据行
+for row in sheet['data'][1:5]:  # 前5行数据
+    print(row)
 ```
 
-## Options
+### 模式 2：读取 Word 调研文档
 
-| 选项 | 说明 | 默认值 |
-|------|------|--------|
-| extract_tables | 提取表格 | false |
-| extract_images | 提取图片信息 | false |
-| encoding | 文本编码 | utf-8 |
-| sheet_name | Excel工作表名 | 第一个 |
+```python
+from read_docx import read_docx
 
-## Limitations
+# 读取调研报告
+doc = read_docx('survey_report.docx')
 
-- PDF扫描件需要OCR支持
-- 加密文件需要密码
-- 超大文件可能需要分块处理
+# 提取标题结构
+headings = [item for item in doc['content'] if item['type'] == 'heading']
+for h in headings:
+    print(f"{'  ' * (h['level']-1)}{h['text']}")
 
-## References
+# 提取正文
+paragraphs = [item['text'] for item in doc['content'] if item['type'] == 'paragraph']
+full_text = '\n'.join(paragraphs)
+```
 
-- `references/format-specs.md` - 各格式规范
-- `scripts/reader.py` - 读取器实现
+### 模式 3：转换为 Markdown
+
+```python
+from read_excel import read_excel_as_markdown
+from read_docx import read_docx_as_markdown
+
+# Excel 转 Markdown 表格
+md_table = read_excel_as_markdown('data.xlsx')
+
+# Word 转 Markdown
+doc_md = read_docx_as_markdown('report.docx')
+```
+
+## 参数说明
+
+### read_excel / read_excel_as_markdown
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `file_path` | str | 是 | 文件路径 |
+| `sheet_names` | list | 否 | 指定工作表名称，默认全部 |
+| `max_rows` | int | 否 | 最大读取行数，默认无限制 |
+
+### read_docx / read_docx_as_markdown
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `file_path` | str | 是 | 文件路径 |
+
+## 限制说明
+
+| 限制 | 说明 |
+|------|------|
+| PDF | 不支持，请使用 paddleocr-text-recognition 或 paddleocr-doc-parsing |
+| .et 格式 | 需要 Windows 环境和 pywin32 |
+| 加密文件 | 需要密码 |
+| 超大文件 | 使用 `max_rows` 参数限制读取行数 |
+
+## 相关工具
+
+- **paddleocr-text-recognition**: 图像/PDF 文字识别
+- **paddleocr-doc-parsing**: 高级文档解析（表格、公式）
+
+## 版本信息
+
+- **基于**: shared-tools v1.1.0
+- **状态**: ready
+- **更新时间**: 2026-04-27
+
+---
+
+**维护者**: SEARCH-R Framework

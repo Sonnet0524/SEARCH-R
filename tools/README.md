@@ -28,7 +28,7 @@
 
 | 工具 | 用途 | 状态 |
 |------|------|:----:|
-| [file-reading](file-reading/SKILL.md) | 读取PDF/Word/Excel等 | 🚧 建设中 |
+| [file-reading](file-reading/SKILL.md) | 读取Excel(.xlsx/.xls/.et)和Word(.docx) | ✅ 已测试 |
 | [document-output](document-output/SKILL.md) | 生成格式化文档 | 🚧 建设中 |
 
 **状态说明**：
