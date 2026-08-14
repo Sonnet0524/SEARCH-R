@@ -332,6 +332,19 @@ insights_index.md  topic.md 中的"关联课题"字段
 
 ---
 
+## 支持联系（AFP 协议）
+
+使用 SEARCH-R 框架过程中遇到任何问题，通过 **AFP（Agent Feedback Protocol）** 与客服助理联系：
+
+- **客服助理邮箱**：`SG-Support@coze.email`
+- **协议规范**：[methodology/AFP.md](../../methodology/AFP.md)
+
+**使用时机**：初始化疑问、框架使用问题、机制不明确、技术故障、改进建议等。
+
+**注意**：研究课题的内容问题应请 Human 决策，不属于 AFP 范围。
+
+---
+
 ## 文件结构
 
 ```

@@ -331,6 +331,7 @@ SEARCH-R/
 │   ├── memory-architecture.md          记忆架构设计
 │   ├── knowledge-extraction.md         知识萃取协议
 │   ├── topic-network-mapping.md        课题网络梳理机制
+│   ├── AFP.md                          Agent 反馈协议（联系客服助理）
 │   └── CHANGELOG.md                    方法论升级记录
 │
 ├── agent/                          ← 智能体定义（按版本归档）
