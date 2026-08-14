@@ -4,484 +4,155 @@
 
 **AI Agent 研究方法论框架**
 
-*A Methodology Framework for AI Agent Research*
-
-[![Version](https://img.shields.io/badge/version-1.1-blue.svg)](https://github.com/Sonnet0524/SEARCH-R)
+[![Agent Version](https://img.shields.io/badge/Agent%20Version-v2.0-blue.svg)]()
 [![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 
-**L0 - Research Data Source Layer**
+*Search（搜索）+ Reflect（反思）= 持续探索真理*
 
 </div>
 
 ---
 
-## 📖 目录
+## 这是什么？
 
-- [概述](#概述)
-- [核心方法论](#核心方法论)
-- [核心理论](#核心理论)
-- [快速开始](#快速开始)
-- [目录结构](#目录结构)
-- [研究成果](#研究成果)
-- [应用场景](#应用场景)
-- [设计哲学](#设计哲学)
+SEARCH-R 是一套面向 AI Agent 的**研究方法论框架**，包含两个核心部分：
+
+1. **方法论（methodology/）**：研究循环、深度分层、知识管理、记忆架构 — 定义「怎么研究」
+2. **智能体定义（agent/）**：身份、行为规范、技能、模板 — 定义「怎么构建 Agent」
+
+方法论独立于任何 AI 平台，不绑定特定服务；智能体定义提供可直接使用的工程规范。
 
 ---
 
-## 概述
-
-### 这是什么？
-
-SEARCH-R Framework 是一个**系统化的 AI Agent 研究方法论框架**，提供从第一性原理到实现思路的完整研究路径。
-
-### 层级定位
+## 仓库结构
 
 ```
-┌─────────────────────────────────────────┐
-│  L0: SEARCH-R ← 你在这里                │
-│  研究方法论和数据源层                    │
-├─────────────────────────────────────────┤
-│  L1: agent-team-research                │
-│  研究支撑层                             │
-├─────────────────────────────────────────┤
-│  L2: AgentTeam-Template                 │
-│  项目模板层                             │
-├─────────────────────────────────────────┤
-│  L3: Projects                           │
-│  具体项目                               │
-└─────────────────────────────────────────┘
+SEARCH-R/
+├── methodology/                    ← 方法论（持续迭代，所有 Agent 版本共享）
+│   ├── search-r-cycle.md               7 阶段研究循环
+│   ├── research-depth.md               研究深度分层（Level 0-4）
+│   ├── human-role.md                   Human 角色定义
+│   ├── insight-management.md           三层知识结构与洞见判定
+│   ├── memory-architecture.md          记忆架构设计
+│   ├── knowledge-extraction.md         知识萃取协议
+│   ├── topic-network-mapping.md        课题网络梳理机制
+│   └── CHANGELOG.md                    方法论升级记录
+│
+├── agent/                          ← 智能体定义（按版本归档）
+│   ├── v1/                             v1.x 归档
+│   └── v2/                             v2.0（当前版本）
+│       ├── SOUL.md                         身份定义
+│       ├── AGENTS.md                       行为规范 + 协作关系
+│       ├── ESSENTIALS.md                   核心概念速查
+│       ├── skills/                         技能定义
+│       └── templates/                      文档模板
+│
+├── INIT.md                         ← 智能体初始化指南（重要！）
+└── CHANGELOG.md                    ← Agent 版本变更记录
 ```
-
-### 核心价值
-
-| 价值 | 描述 |
-|------|------|
-| 🔍 **系统化方法论** | 完整的SEARCH-R研究循环 |
-| 🤖 **Research Agent** | 如何设计研究型Agent |
-| 📝 **文档模板** | 观察笔记、检索报告、理论文档 |
-| 🎯 **多层深度** | 从第一性原理到实现思路 |
-| 🧠 **核心理论** | Agent架构、质量门控、Skills分离 |
 
 ---
 
-## 核心方法论
+## 🚀 快速开始：智能体接入指南
+
+> 你正在构建一个 Research Agent？按以下步骤接入 SEARCH-R。
+
+### Step 1：阅读核心定义
+
+按顺序阅读 `agent/v2/` 下的文件：
+
+| 顺序 | 文件 | 作用 |
+|------|------|------|
+| 1 | `SOUL.md` | 理解 Agent 的身份、使命、性格 |
+| 2 | `AGENTS.md` | 行为规范、协作关系、质量门控 |
+| 3 | `ESSENTIALS.md` | 速查 10 个核心概念 |
+
+### Step 2：掌握方法论
+
+阅读 `methodology/` 下的文件：
+
+| 顺序 | 文件 | 作用 |
+|------|------|------|
+| 1 | `search-r-cycle.md` | 核心：7 阶段循环 + 知识交互协议 |
+| 2 | `research-depth.md` | 研究深度：Level 0-4 |
+| 3 | `human-role.md` | 人机协作边界 |
+| 4 | `insight-management.md` | 知识三层结构 + 洞见判定 |
+| 5 | `memory-architecture.md` | 记忆系统分层 |
+| 6 | `knowledge-extraction.md` | 知识萃取方法 |
+| 7 | `topic-network-mapping.md` | 课题网络梳理 |
+
+### Step 3：加载技能
+
+按需加载 `agent/v2/skills/` 下的技能：
+
+- `knowledge-extraction/` — 知识萃取
+- `topic-management/` — 课题管理
+- `network-mapping/` — 课题网络梳理
+
+### Step 4：启动研究
+
+1. 创建课题目录
+2. 从 SEARCH-R 循环的 S（Survey）阶段开始
+3. 每个阶段按知识交互协议读写知识
+4. 产出归档到课题目录
+
+**完整的初始化流程详见 [INIT.md](INIT.md)**
+
+---
+
+## 方法论核心概览
 
 ### SEARCH-R 循环
 
 ```
-  ┌───────────────────────────────────────┐
-  │                                       │
-  │   S ─ Survey（观察调研）              │
-  │   │   从实践中发现问题                 │
-  │   ↓                                   │
-  │   E ─ Explore（探索检索）             │
-  │   │   检索相关知识                    │
-  │   ↓                                   │
-  │   A ─ Analyze（分析思考）             │
-  │   │   深度理论构建                    │
-  │   ↓                                   │
-  │   R ─ Review（评审探讨）              │
-  │   │   Human参与探讨                   │
-  │   ↓                                   │
-  │   C ─ Confirm（确认验证）             │
-  │   │   实践中验证                      │
-  │   ↓                                   │
-  │   H ─ Harvest（收获产出）             │
-  │   │   沉淀研究成果                    │
-  │   ↓                                   │
-  │   R ─ Reflect（反思迭代）             │
-  │       持续优化方法                    │
-  │                                       │
-  └───────────────────────────────────────┘
-                    ↓
-              回到S继续循环
+S → Survey（观察调研）    — 观察实践，发现问题
+E → Explore（探索检索）   — 检索知识，收集信息
+A → Analyze（分析思考）   — 深度分析，构建理论
+R → Review（评审探讨）    — Human 评审，方向确认
+C → Confirm（确认验证）   — 实践验证，收集证据
+H → Harvest（收获产出）   — 沉淀成果，知识固化
+R → Reflect（反思迭代）   — 反思迭代，持续改进
 ```
 
-### 研究深度层次
+### 研究深度
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│  Level 0: 第一性原理层                                   │
-│  问题：XXX的本质是什么？为什么要XXX？                     │
-│  方法：追问"为什么"直到无法再追问                        │
-├──────────────────────────────────────────────────────────┤
-│  Level 1: 理论框架层                                     │
-│  问题：XXX如何建模？决策模型是什么？                      │
-│  方法：构建模型、形式化表达、逻辑推演                     │
-├──────────────────────────────────────────────────────────┤
-│  Level 2: 设计原则层                                     │
-│  问题：应该遵循什么原则？原则如何权衡？                   │
-│  方法：从理论推导原则                                     │
-├──────────────────────────────────────────────────────────┤
-│  Level 3: 实现思路层                                     │
-│  问题：如何设计？有哪些方案？                            │
-│  方法：从原则推导思路                                     │
-├──────────────────────────────────────────────────────────┤
-│  Level 4: 实施建议层 ❌                                  │
-│  问题：代码怎么写？配置放哪里？                          │
-│  方法：这不是Research Agent的职责范围                     │
-└──────────────────────────────────────────────────────────┘
+Level 0: 第一性原理    — 问题的本质是什么？
+Level 1: 理论框架      — 如何建模？
+Level 2: 设计原则      — 应该遵循什么原则？
+Level 3: 实现思路      — 如何设计？（执行层）
+Level 4: 实施建议      — 代码怎么写？（执行层）
 ```
+
+Research Agent 聚焦 Level 0-2，Level 3-4 交给执行层。
+
+### v2.0 核心增强
+
+| 增强项 | 说明 |
+|--------|------|
+| 知识交互协议 | 每个 SEARCH-R 阶段明确如何读写知识 |
+| 三层知识结构 | Info → Data → Insight，统一知识分级 |
+| 洞见判定标准 | 「能否改变行动逻辑」 |
+| 记忆架构 | 即时层 + 近中期层，解决长期协作上下文 |
+| 课题网络梳理 | 发现跨课题连接与跨域洞察 |
 
 ---
 
-## 核心理论
+## 版本历史
 
-### 1. Agent 系统架构
+| 版本 | 日期 | 主题 | 说明 |
+|------|------|------|------|
+| **Agent v2.0** | 2026-08-14 | 知识驱动 | 增加知识管理、记忆架构、课题网络梳理 |
+| Agent v1.1 | 2026-03-11 | 初始版本 | 基础 SEARCH-R 循环 + 工具集成 |
 
-```
-Agent System = Identity Layer + Capability System + Memory System + Access System
-
-┌─────────────────────────────────────────────────────────┐
-│                    Agent System                         │
-├─────────────────────────────────────────────────────────┤
-│  Identity Layer                                         │
-│  ├─ File: AGENTS.md                                    │
-│  ├─ Content: Role + Core Capabilities                   │
-│  └─ Nature: Long-term, Stable                          │
-├─────────────────────────────────────────────────────────┤
-│  Capability System                                      │
-│  ├─ Core Capabilities (Inseparable)                    │
-│  └─ General Capabilities (Skills, Reusable)            │
-├─────────────────────────────────────────────────────────┤
-│  Memory System                                          │
-│  ├─ Identity Memory (AGENTS.md)                        │
-│  ├─ State Memory (CATCH_UP.md)                         │
-│  ├─ Experience Memory (experiences/)                   │
-│  └─ Session Memory (session-log.md)                    │
-├─────────────────────────────────────────────────────────┤
-│  Access System                                          │
-│  ├─ Memory Index (memory-index.yaml)                   │
-│  ├─ Retrieval Mechanism                                │
-│  └─ Compression Mechanism                              │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 2. 质量门控分层
-
-```
-Quality Gate = Metacognitive Awareness + Evaluation Rules + Evaluation Tools
-
-┌─────────────────────────────────────────────────────────┐
-│  Layer 1: Metacognitive Awareness (Inseparable)        │
-│  ─────────────────────────────────────────────────────  │
-│  "I know when I don't know"                            │
-│  ├─ Defined in AGENTS.md                               │
-│  └─ Core attribute of Agent                            │
-├─────────────────────────────────────────────────────────┤
-│  Layer 2: Evaluation Rules (Can be Skills)             │
-│  ─────────────────────────────────────────────────────  │
-│  ├─ Determinism evaluation (HIGH/MEDIUM/LOW)           │
-│  ├─ Acceptability evaluation                           │
-│  └─ Confusion detection                                │
-├─────────────────────────────────────────────────────────┤
-│  Layer 3: Evaluation Tools (Can be Skills)             │
-│  ─────────────────────────────────────────────────────  │
-│  ├─ Quality gate schemas                               │
-│  └─ Evaluation workflows                               │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 3. Agent vs Subagent
-
-```
-┌──────────────────────────────────────────────────────────┐
-│                   Distinction Standard                    │
-│              Decision Autonomy (NOT documentation)       │
-└──────────────────────────────────────────────────────────┘
-                           │
-           ┌───────────────┴───────────────┐
-           │                               │
-           ▼                               ▼
-┌─────────────────────┐       ┌─────────────────────┐
-│   Agent             │       │   Subagent          │
-│   (Has autonomy)    │       │   (No autonomy)     │
-├─────────────────────┤       ├─────────────────────┤
-│ ✅ Autonomous       │       │ ❌ Task-bound       │
-│ ✅ Independent      │       │ ❌ Decision-limited │
-│ ✅ Responsible      │       │ ❌ Execute assigned │
-├─────────────────────┤       ├─────────────────────┤
-│ Example:            │       │ Example:            │
-│ • PM Agent          │       │ • AI Team           │
-│ • Research Agent    │       │ • Core Team         │
-└─────────────────────┘       └─────────────────────┘
-```
-
-### 4. Skills 分离原则
-
-```
-┌──────────────────────────────────────────────────────────┐
-│                  What should be Skills?                  │
-└──────────────────────────────────────────────────────────┘
-
-  Principle 1          Principle 2          Principle 3
-  ───────────          ───────────          ───────────
-  Not every time       Reusable             Independent
-  ────────────────     ────────────────     ────────────────
-       │                    │                    │
-       └────────────────────┼────────────────────┘
-                            │
-                            ▼
-              ┌─────────────────────────┐
-              │   Can be Skills         │
-              └─────────────────────────┘
-
-┌──────────────────────────────────────────────────────────┐
-│                    Skills Categories                     │
-├──────────────────────────────────────────────────────────┤
-│  🎯 Decision Support    │  quality-gate, risk-assessment │
-│  🔄 Workflows           │  git-workflow, review-process  │
-│  📋 Standards           │  coding-standards, doc-guide   │
-│  📚 Domain Knowledge    │  embedding-models, vector-search│
-└──────────────────────────────────────────────────────────┘
-```
-
-### 5. 记忆系统 vs 访问系统
-
-```
-┌──────────────────────────────────────────────────────────┐
-│                   Key Distinction                        │
-└──────────────────────────────────────────────────────────┘
-
-  Memory System                      Access System
-  ─────────────                      ─────────────
-  (Content)                          (Method)
-                                       
-  ┌─────────────┐                   ┌─────────────┐
-  │ Books in    │                   │ Library     │
-  │ a library   │                   │ catalog     │
-  └─────────────┘                   └─────────────┘
-                                       
-  Stored information                 Method to retrieve
-  itself                             content
-
-┌──────────────────────────────────────────────────────────┐
-│                    Important Note                        │
-├──────────────────────────────────────────────────────────┤
-│  Index ≠ Memory                                         │
-│  Index is "directory", not "content"                    │
-│  Index is "method", not "memory"                        │
-└──────────────────────────────────────────────────────────┘
-```
+详细记录见 [CHANGELOG.md](CHANGELOG.md)（Agent）和 [methodology/CHANGELOG.md](methodology/CHANGELOG.md)（方法论）
 
 ---
-
-## 快速开始
-
-### 安装使用
-
-```bash
-# 克隆仓库
-git clone https://github.com/Sonnet0524/SEARCH-R.git
-
-# 进入目录
-cd SEARCH-R
-
-# 启动 Research Agent
-opencode --agent research
-```
-
-### 学习路径
-
-```
-Step 1 ──────────────────────────────────────────────────→
-  理解SEARCH-R方法论
-  📖 阅读 methodology/search-r-cycle.md
-
-Step 2 ──────────────────────────────────────────────────→
-  了解Research Agent设计
-  📖 阅读 agents/research/AGENTS.md
-
-Step 3 ──────────────────────────────────────────────────→
-  建立文档结构
-  📁 创建研究文档目录
-
-Step 4 ──────────────────────────────────────────────────→
-  开始研究循环
-  🔄 从Survey（S）开始
-```
-
----
-
-## 目录结构
-
-```
-SEARCH-R/
-├── 📄 README.md                      # 本文件
-├── 📁 agents/
-│   └── 📁 research/
-│       ├── 📄 AGENTS.md             # Agent角色定义
-│       ├── 📄 init.md               # 初始化指南
-│       ├── 📄 current-topic.md      # 当前研究课题
-│       ├── 📄 session-log.md        # 会话日志
-│       │
-│       ├── 📁 theory/               # 理论文档
-│       │   ├── 📄 2026-03-07-metacognition-implementation.md
-│       │   ├── 📄 2026-03-07-memory-compression-deep-dive.md
-│       │   └── 📄 2026-03-07-quality-gate-and-agent-definition.md
-│       │
-│       ├── 📁 reflections/          # 自我反思
-│       │   ├── 📄 2026-03-07.md
-│       │   └── 📄 2026-03-07-quality-gate-review.md
-│       │
-│       ├── 📁 examples/             # 示例文档
-│       ├── 📁 skills/               # 能力模块
-│       └── 📁 research-topics/      # 研究课题
-│
-├── 📁 methodology/                   # 方法论
-│   ├── 📄 README.md
-│   ├── 📄 search-r-cycle.md         # SEARCH-R循环
-│   ├── 📄 research-depth.md         # 研究深度
-│   └── 📄 human-role.md             # Human角色
-│
-├── 📁 templates/                     # 文档模板
-│   ├── 📄 observation-template.md
-│   ├── 📄 retrieval-template.md
-│   ├── 📄 theory-template.md
-│   └── 📄 reflection-template.md
-│
-└── 📁 docs/                         # 使用文档
-    ├── 📄 getting-started.md
-    ├── 📄 design-philosophy.md
-    └── 📄 MIGRATION-REPORT.md
-```
-
----
-
-## 研究成果
-
-### 📚 理论文档
-
-| 文档 | 内容 | 行数 |
-|------|------|------|
-| [元认知意识实现](agents/research/theory/2026-03-07-metacognition-implementation.md) | 质量门控、确定性评估、元认知设计 | 1,403 |
-| [记忆压缩机制](agents/research/theory/2026-03-07-memory-compression-deep-dive.md) | Context优化、记忆系统设计 | 1,277 |
-| [质量门控理论](agents/research/theory/2026-03-07-quality-gate-and-agent-definition.md) | 元认知意识、质量门控本质 | 804 |
-
-### 🔄 自我反思
-
-| 文档 | 内容 | 行数 |
-|------|------|------|
-| [方法论设计反思](agents/research/reflections/2026-03-07.md) | Research Agent方法论评估 | 288 |
-| [质量门控Review](agents/research/reflections/2026-03-07-quality-gate-review.md) | 质量门控深度反思 | 361 |
-
-**总计**: 4,132 行核心研究文档
-
----
-
-## 应用场景
-
-### ✅ 适合的研究课题
-
-| 场景 | 说明 |
-|------|------|
-| 🏗️ 框架和方法论研究 | 需要系统性构建理论框架 |
-| 🔍 技术调研和评估 | 需要深入分析技术方案 |
-| 🏛️ 架构设计和演进 | 需要从第一性原理思考 |
-| 📚 知识沉淀和提炼 | 需要记录和复用研究成果 |
-
-### ❌ 不适合的任务
-
-| 场景 | 原因 |
-|------|------|
-| ❓ 简单信息查询 | 不需要深度研究 |
-| 💻 具体代码实现 | 这是执行层工作 |
-| 📋 日常项目管理 | 不是研究型任务 |
-| 🔧 简单问题解决 | 不需要系统性方法 |
-
----
-
-## 设计哲学
-
-### Research Agent 不是执行者
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                  Research Agent                         │
-│                  ─────────────                          │
-│                                                         │
-│  Focus on:           Not on:                           │
-│  ─────────           ─────────                          │
-│  ✅ Why              ❌ How to implement                │
-│  ✅ What             ❌ Code details                    │
-│  ✅ Principles       ❌ Configuration                   │
-│                                                         │
-│  Provide:                                               │
-│  ─────────                                               │
-│  💡 Theoretical support                                 │
-│  🎨 Design thinking                                     │
-│  📋 Implementation approaches                           │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 研究三原则
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  1️⃣ Traceable                                          │
-│  ────────────────                                       │
-│  Every research should record:                          │
-│  • How questions were discovered                        │
-│  • How insights emerged                                 │
-│  • How decisions were made                              │
-├─────────────────────────────────────────────────────────┤
-│  2️⃣ Deep                                               │
-│  ────────────────                                       │
-│  Should not stay on the surface:                        │
-│  • Ask first principles                                 │
-│  • Build theoretical frameworks                         │
-│  • Derive design principles                             │
-├─────────────────────────────────────────────────────────┤
-│  3️⃣ Evolving                                           │
-│  ────────────────                                       │
-│  Research methods should evolve:                        │
-│  • Reflect after each session                           │
-│  • Iterate when problems found                          │
-│  • Continuously optimize                                │
-└─────────────────────────────────────────────────────────┘
-```
-
----
-
-## Human 的双重角色
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                 Human's Dual Roles                      │
-└─────────────────────────────────────────────────────────┘
-                           │
-           ┌───────────────┴───────────────┐
-           │                               │
-           ▼                               ▼
-┌─────────────────────┐       ┌─────────────────────┐
-│ Role 1              │       │ Role 2              │
-│ ─────────           │       │ ─────────           │
-│ Information         │       │ Key Decision        │
-│ Transmitter         │       │ Maker               │
-├─────────────────────┤       ├─────────────────────┤
-│ • Agent间信息传递   │       │ • 研究方向选择      │
-│ • 不做决策          │       │ • 设计方案决策      │
-│ • 不算"介入"        │       │ • 影响项目方向      │
-└─────────────────────┘       └─────────────────────┘
-        │                              │
-        │                              │
-        ▼                              ▼
-  Not counted                    IS counted
-  as intervention                as intervention
-```
-
----
-
-## 贡献
-
-这个框架在持续迭代中。如果你有改进建议，欢迎讨论。
 
 ## 许可
 
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
-
-本项目采用 GNU Affero General Public License v3.0 (AGPL v3.0) 协议开源。
+[AGPL v3.0](https://www.gnu.org/licenses/agpl-3.0)
 
 ---
 
@@ -489,8 +160,8 @@ SEARCH-R/
 
 **维护者**: Sonnet.G  
 **创建时间**: 2026-03-07  
-**最后更新**: 2026-03-08  
-**状态**: 持续迭代中
+**最后更新**: 2026-08-14  
+**当前 Agent 版本**: v2.0  
 
 **[⬆ 返回顶部](#-search-r-framework)**
 

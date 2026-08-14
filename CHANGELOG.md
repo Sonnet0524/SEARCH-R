@@ -1,23 +1,56 @@
 # CHANGELOG
 
-## [v1.2] (2026-03-08)
+> Agent 版本变更记录。方法论升级记录见 `methodology/CHANGELOG.md`。
 
-### 文档迁移与整理
-- 迁移理论文档到 theory/ 目录
-- 迁移反思文档到 reflections/ 目录
-- 添加示例文档 examples/
-- 创建会话日志机制
+---
 
-## [v1.1] (2026-03-07)
+## Agent v2.0 — 2026-08-14
 
-### 多课题管理支持
-- 分离研究主体和研究课题
-- 添加 init.md 指南
-- 支持课题切换
+**主题**：知识驱动的研究型 Agent
 
-## [v1.0] (2026-03-07)
+### 新增
 
-### 初始版本
-- 定义 SEARCH-R 方法论
-- 核心能力明确
-- Skills 架构设计
+| 文件 | 内容 |
+|------|------|
+| `SOUL.md` | Agent 身份定义：使命、性格、行为风格、核心使命 |
+| `AGENTS.md` | Agent 行为规范：协作关系、质量门控、记忆系统、知识应用协议 |
+| `ESSENTIALS.md` | 10 个核心概念速查卡片 |
+| `skills/knowledge-extraction/` | 知识萃取技能：三层分类、洞见判定、跨课题关联 |
+| `skills/topic-management/` | 课题管理技能：创建、更新、回顾、归档 |
+| `skills/network-mapping/` | 课题网络梳理技能：发现跨课题连接与洞察 |
+| `templates/insight-template.md` | 洞见记录模板（Info / Data / Insight） |
+| `templates/topic-overview-template.md` | 课题总览表模板 |
+| `templates/network-map-template.md` | 课题网络图模板 |
+
+### 增强
+
+- 记忆系统：即时层（规则 + 锚点 + 指针）+ 近中期层（索引 + 条目）
+- 知识应用协议：SEARCH-R 各阶段与知识体系的交互规则
+- 课题并行管理：活跃课题 ≤ 2，全量索引
+- 关联式思维适配：Agent 负责接住扩散、发现连接、翻译为线性文本
+
+### 与 v1.x 的区别
+
+| 维度 | v1.x | v2.0 |
+|------|------|------|
+| 定位 | 研究流程框架 | 知识驱动的研究 Agent |
+| 知识管理 | 散落各处 | 三层结构（Info/Data/Insight） |
+| 记忆系统 | 未定义 | 即时层 + 近中期层 |
+| 课题关系 | 独立管理 | 网络梳理 + 跨课题洞察 |
+| 平台绑定 | 绑定 OpenCode | 平台无关，通用方法论 |
+| 工具集成 | 百度系列 API | 平台无关，可插拔 |
+
+---
+
+## Agent v1.1 — 2026-03-11
+
+**主题**：SEARCH-R 框架初始版本
+
+### 包含
+
+- SEARCH-R 7 阶段研究循环
+- 研究深度 5 层定义（Level 0-4）
+- Human 角色定义
+- 基础文档模板
+- 工具集成（百度搜索、百度学术、PaddleOCR 等）
+- OpenCode 平台配置
