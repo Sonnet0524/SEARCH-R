@@ -12,18 +12,18 @@
 
 | 文件 | 内容 |
 |------|------|
-| `insight-management.md` | 三层知识结构（Info → Data → Insight），洞见判定标准「能否改变行动逻辑」，跨课题关联机制 |
-| `memory-architecture.md` | 三层记忆架构（即时层 / 近中期层 / 长期层），容量管理策略 |
-| `knowledge-extraction.md` | 知识萃取协议：触发时机、萃取方法、质量标准 |
-| `topic-network-mapping.md` | 课题网络梳理机制：触发条件、梳理流程、跨课题洞察发现 |
+| [insight-management.md](insight-management.md) | 三层知识结构（Info → Data → Insight），洞见判定标准「能否改变行动逻辑」，跨课题关联机制 |
+| [memory-architecture.md](memory-architecture.md) | 三层记忆架构（即时层 / 近中期层 / 长期层），容量管理策略 |
+| [knowledge-extraction.md](knowledge-extraction.md) | 独立于研究循环的知识萃取协议：触发时机、萃取方法、质量标准 |
+| [topic-network-mapping.md](topic-network-mapping.md) | 课题网络梳理机制：触发条件、梳理流程、跨课题洞察发现 |
 
-### 增强
+### 调整
 
 | 文件 | 变化 |
 |------|------|
-| `search-r-cycle.md` | 增加知识交互协议，定义每个阶段如何读写知识体系 |
-| `human-role.md` | 增加关联式思维适配：Agent 负责接住扩散、发现连接、翻译为线性文本 |
-| `research-depth.md` | 无变化（保持 v1.x） |
+| [search-r-cycle.md](search-r-cycle.md) | 明确产出是研究结论而非 Insight；知识萃取定位为独立能力，可选配合 |
+| [human-role.md](human-role.md) | 增加关联式思维适配：Agent 负责接住扩散、发现连接、翻译为线性文本 |
+| [research-depth.md](research-depth.md) | 无变化 |
 
 ### 设计动机
 
@@ -34,7 +34,7 @@ v1.x 解决了「研究流程」的问题——先做什么、后做什么。但
 3. 长期协作缺乏记忆管理，上下文容易丢失
 4. 研究循环与知识体系是分离的，知识没有被充分利用
 
-v2.0 的核心改变：**让研究循环与知识体系深度融合**。每个阶段都有明确的知识读写规则，知识不再是静态存储，而是在循环中流动、沉淀、连接。
+v2.0 的核心改变：**让研究循环与知识体系解耦但可协作**。研究循环专注推进研究深度，知识萃取作为独立能力在产出后可选执行。
 
 ---
 
@@ -46,9 +46,9 @@ v2.0 的核心改变：**让研究循环与知识体系深度融合**。每个�
 
 | 文件 | 内容 |
 |------|------|
-| `search-r-cycle.md` | 7 阶段研究循环（S-E-A-R-C-H-R） |
-| `research-depth.md` | 5 层研究深度（Level 0-4） |
-| `human-role.md` | Human 角色定义（信息传递者 vs 决策者） |
+| [search-r-cycle.md](search-r-cycle.md) | 7 阶段研究循环（S-E-A-R-C-H-R） |
+| [research-depth.md](research-depth.md) | 5 层研究深度（Level 0-4） |
+| [human-role.md](human-role.md) | Human 角色定义（信息传递者 vs 决策者） |
 
 ### 核心理念
 
