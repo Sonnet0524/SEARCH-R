@@ -359,7 +359,11 @@ SEARCH-R/
 
 ## 智能体接入指南
 
-> 想让一个 AI Agent 成为 SEARCH-R 研究智能体？按以下步骤初始化。
+> 想让一个 AI Agent 成为 SEARCH-R 研究智能体？
+>
+> 📖 **完整的初始化流程（含 5 个 Phase）详见 [INIT.md](INIT.md)**
+>
+> 以下是概览：
 
 ### Step 1：建立身份
 
@@ -398,7 +402,6 @@ SEARCH-R/
 3. 注册到课题总览表
 4. 从 SEARCH-R 循环的 S（Survey）阶段开始
 
-**完整的初始化流程详见 [INIT.md](INIT.md)**
 
 ---
 
